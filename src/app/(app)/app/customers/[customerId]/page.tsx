@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { ContactEditor } from "@/components/customers/contact-editor";
+import { ContractForm } from "@/components/customers/contract-form";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card } from "@/components/ui/card";
 import { StatusPill, customerStatusTone } from "@/components/ui/status-pill";
@@ -72,23 +74,7 @@ export default async function CustomerDetailPage({
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--ink-500)]">Contacts</p>
               <span className="text-xs text-[var(--ink-500)]">{contacts.length}</span>
             </div>
-            {contacts.length === 0 ? (
-              <p className="text-sm text-[var(--ink-500)]">No contacts yet.</p>
-            ) : (
-              <ul className="divide-y divide-[var(--line-soft)]">
-                {contacts.map((c) => (
-                  <li key={c.id} className="py-2 text-sm">
-                    <p className="font-medium text-[var(--surface-ink)]">
-                      {c.full_name}
-                      {c.is_primary ? <span className="ml-2 text-xs text-[var(--accent-600)]">primary</span> : null}
-                    </p>
-                    <p className="text-xs text-[var(--ink-500)]">
-                      {[c.role_title, c.email, c.phone].filter(Boolean).join(" · ")}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <ContactEditor workspaceId={ctx.workspaceId} customerId={customer.id} contacts={contacts} />
           </div>
         </Card>
 
@@ -98,6 +84,7 @@ export default async function CustomerDetailPage({
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--ink-500)]">Contracts</p>
               <Link href="/app/contracts" className="text-xs text-[var(--accent-600)]">View all</Link>
             </div>
+            <ContractForm workspaceId={ctx.workspaceId} customerId={customer.id} />
             {contracts.length === 0 ? (
               <p className="text-sm text-[var(--ink-500)]">No contracts yet.</p>
             ) : (
