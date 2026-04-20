@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { ActivityTimeline } from "@/components/customers/activity-timeline";
 import { ContactEditor } from "@/components/customers/contact-editor";
 import { ContractForm } from "@/components/customers/contract-form";
 import { PageHeader } from "@/components/layout/page-header";
@@ -32,6 +33,26 @@ export default async function CustomerDetailPage({
   if (!detail) notFound();
 
   const { customer, contacts, services, contracts, quotes } = detail;
+
+  const { data: rawActivities } = await supabase
+    .from("activities")
+    .select("*, profiles:author_id(full_name, email)")
+    .eq("workspace_id", ctx.workspaceId)
+    .eq("customer_id", customerId)
+    .order("occurred_at", { ascending: false })
+    .limit(20);
+
+  const activities = (rawActivities ?? []).map((a: Record<string, unknown>) => {
+    const profile = a.profiles as { full_name?: string; email?: string } | null;
+    return {
+      id: a.id as string,
+      kind: a.kind as "call" | "email" | "note" | "meeting",
+      subject: (a.subject as string | null) ?? null,
+      body: (a.body as string | null) ?? null,
+      occurred_at: a.occurred_at as string,
+      author_name: profile?.full_name || profile?.email || null,
+    };
+  });
 
   return (
     <div className="space-y-6">
@@ -148,6 +169,17 @@ export default async function CustomerDetailPage({
           </div>
         </Card>
       ) : null}
+
+      <Card>
+        <div className="space-y-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--ink-500)]">Activity</p>
+          <ActivityTimeline
+            workspaceId={ctx.workspaceId}
+            customerId={customer.id}
+            activities={activities}
+          />
+        </div>
+      </Card>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Card } from "@/components/ui/card";
 import { FacilityBadge } from "@/components/ui/facility-badge";
 import { StatusPill, receiptStatusTone } from "@/components/ui/status-pill";
+import { ReceiptLinesEditor } from "@/components/warehouse/receipt-lines-editor";
 import { formatDateTime } from "@/lib/utils";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { loadWorkspaceContext } from "@/lib/supabase/workspace";
@@ -27,13 +28,34 @@ export default async function InboundReceiptDetailPage({
     .maybeSingle();
   if (error || !receipt) notFound();
 
-  const { data: lines } = await supabase
-    .from("inbound_receipt_lines")
-    .select("*")
-    .eq("receipt_id", receiptId);
-
   const customer = (receipt as Record<string, unknown>).customers as { id: string; display_name: string } | null;
   const facility = (receipt as Record<string, unknown>).facilities as { id: string; code: string; name: string } | null;
+  const customerId = (receipt.customer_id as string) || customer?.id || "";
+
+  const [linesRes, skusRes] = await Promise.all([
+    supabase
+      .from("inbound_receipt_lines")
+      .select("*")
+      .eq("receipt_id", receiptId)
+      .order("id"),
+    supabase
+      .from("skus")
+      .select("id, sku_code, description, uom")
+      .eq("workspace_id", ctx.workspaceId)
+      .eq("customer_id", customerId)
+      .order("sku_code"),
+  ]);
+
+  const lines = (linesRes.data ?? []).map((l) => ({
+    id: l.id as string,
+    sku_code: (l.sku_code as string | null) ?? null,
+    description: (l.description as string | null) ?? null,
+    expected_qty: Number(l.expected_qty),
+    received_qty: Number(l.received_qty),
+    uom: (l.uom as string | null) ?? null,
+    lot_code: (l.lot_code as string | null) ?? null,
+    condition: (l.condition as string | null) ?? null,
+  }));
 
   return (
     <div className="space-y-5">
@@ -63,31 +85,24 @@ export default async function InboundReceiptDetailPage({
       </Card>
 
       <Card>
-        <div className="space-y-3">
+        <div className="space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--ink-500)]">Lines</p>
-            <span className="text-xs text-[var(--ink-500)]">{lines?.length ?? 0}</span>
+            <span className="text-xs text-[var(--ink-500)]">{lines.length}</span>
           </div>
-          {!lines || lines.length === 0 ? (
-            <p className="text-sm text-[var(--ink-500)]">
-              No lines yet. Once product arrives, add expected vs. received quantities.
-            </p>
-          ) : (
-            <ul className="divide-y divide-[var(--line-soft)] text-sm">
-              {lines.map((l) => (
-                <li key={l.id} className="flex items-center justify-between py-2">
-                  <div>
-                    <p className="font-medium text-[var(--surface-ink)]">{l.sku_code ?? "—"}</p>
-                    <p className="text-xs text-[var(--ink-500)]">{l.description ?? ""}</p>
-                  </div>
-                  <div className="text-right text-xs">
-                    <p>Expected <span className="font-semibold text-[var(--surface-ink)]">{l.expected_qty}</span></p>
-                    <p>Received <span className="font-semibold text-[var(--surface-ink)]">{l.received_qty}</span></p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
+          <ReceiptLinesEditor
+            receiptId={receiptId}
+            customerId={customerId}
+            lines={lines}
+            skus={(skusRes.data ?? []).map((s) => ({
+              id: s.id as string,
+              sku_code: s.sku_code as string,
+              description: (s.description as string | null) ?? null,
+              uom: (s.uom as string | null) ?? null,
+            }))}
+            status={receipt.status as string}
+            receivedAt={(receipt.received_at as string | null) ?? null}
+          />
         </div>
       </Card>
 

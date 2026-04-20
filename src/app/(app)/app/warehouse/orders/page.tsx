@@ -30,6 +30,10 @@ export default async function OrdersPage({
         eyebrow="Warehouse"
         title="Fulfillment orders"
         subtitle="Orders in the queue awaiting pick, pack, and ship."
+        actions={[
+          { label: "New order", href: "/app/warehouse/orders/new" },
+          { label: "Import from WMS", href: "/app/settings/wms" },
+        ]}
       />
 
       {orders.length === 0 ? (

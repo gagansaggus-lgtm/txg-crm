@@ -1,7 +1,6 @@
 import { PageHeader } from "@/components/layout/page-header";
+import { TaskEditor } from "@/components/tasks/task-editor";
 import { Card } from "@/components/ui/card";
-import { EmptyState } from "@/components/ui/empty-state";
-import { formatDateTime } from "@/lib/utils";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { loadWorkspaceContext } from "@/lib/supabase/workspace";
 
@@ -10,36 +9,27 @@ export default async function TasksPage() {
   if (!ctx) return null;
 
   const supabase = await createSupabaseServerClient();
-  const { data: tasks } = await supabase
+  const { data: rows } = await supabase
     .from("tasks")
-    .select("*")
+    .select("id, title, body, due_at, status")
     .eq("workspace_id", ctx.workspaceId)
-    .eq("status", "open")
+    .neq("status", "cancelled")
     .order("due_at", { ascending: true, nullsFirst: false });
+
+  const tasks = (rows ?? []).map((t) => ({
+    id: t.id as string,
+    title: t.title as string,
+    body: (t.body as string | null) ?? null,
+    due_at: (t.due_at as string | null) ?? null,
+    status: t.status as "open" | "done" | "cancelled",
+  }));
 
   return (
     <div className="space-y-5">
-      <PageHeader eyebrow="Ops" title="Tasks" subtitle="Open tasks across the team." />
-
-      {!tasks || tasks.length === 0 ? (
-        <EmptyState
-          title="No open tasks"
-          description="Tasks can be attached to customers, shipments, orders, or receipts."
-        />
-      ) : (
-        <Card>
-          <ul className="divide-y divide-[var(--line-soft)]">
-            {tasks.map((t) => (
-              <li key={t.id} className="py-3">
-                <p className="font-semibold text-[var(--surface-ink)]">{t.title}</p>
-                <p className="text-xs text-[var(--ink-500)]">
-                  Due {formatDateTime(t.due_at)}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </Card>
-      )}
+      <PageHeader eyebrow="Ops" title="Tasks" subtitle="Personal + team to-dos." />
+      <Card>
+        <TaskEditor workspaceId={ctx.workspaceId} tasks={tasks} />
+      </Card>
     </div>
   );
 }

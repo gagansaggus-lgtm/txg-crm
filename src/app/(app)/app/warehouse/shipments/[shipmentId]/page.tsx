@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Card } from "@/components/ui/card";
 import { FacilityBadge } from "@/components/ui/facility-badge";
 import { StatusPill, shipmentStatusTone } from "@/components/ui/status-pill";
+import { ShipmentActions } from "@/components/warehouse/shipment-actions";
 import { formatDateTime } from "@/lib/utils";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { loadWorkspaceContext } from "@/lib/supabase/workspace";
@@ -64,10 +65,20 @@ export default async function ShipmentDetailPage({
       </Card>
 
       <Card>
+        <ShipmentActions
+          shipmentId={shipmentId}
+          fulfillmentOrderId={(shipment.fulfillment_order_id as string | null) ?? null}
+          status={shipment.status as "pending" | "label_created" | "picked_up" | "in_transit" | "out_for_delivery" | "delivered" | "exception"}
+          shippedAt={(shipment.shipped_at as string | null) ?? null}
+          deliveredAt={(shipment.delivered_at as string | null) ?? null}
+        />
+      </Card>
+
+      <Card>
         <div className="space-y-3">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--ink-500)]">Events</p>
           {!events || events.length === 0 ? (
-            <p className="text-sm text-[var(--ink-500)]">No events logged. Phase 2 adds scan-based events.</p>
+            <p className="text-sm text-[var(--ink-500)]">No events yet. Use the status buttons above or log a custom event.</p>
           ) : (
             <ol className="space-y-3 text-sm">
               {events.map((e) => (

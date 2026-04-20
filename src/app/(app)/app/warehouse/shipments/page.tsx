@@ -30,6 +30,7 @@ export default async function ShipmentsPage({
         eyebrow="Warehouse"
         title="Shipments"
         subtitle="Outbound fulfillment, last-mile, and international."
+        actions={[{ label: "New shipment", href: "/app/warehouse/shipments/new" }]}
       />
 
       {shipments.length === 0 ? (
