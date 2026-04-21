@@ -1,5 +1,6 @@
 import { BottomNav } from "@/components/layout/bottom-nav";
 import { MobileHeader } from "@/components/layout/mobile-header";
+import { Toaster } from "@/components/ui/sonner";
 
 type AppShellProps = {
   children: React.ReactNode;
@@ -14,6 +15,7 @@ export function AppShell({ children, user }: AppShellProps) {
         {children}
       </main>
       <BottomNav />
+      <Toaster richColors position="top-right" />
     </div>
   );
 }

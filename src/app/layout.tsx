@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
-import { Manrope, Playfair_Display } from "next/font/google";
+import { Manrope, Playfair_Display, Geist } from "next/font/google";
 
 import "./globals.css";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -29,7 +32,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${manrope.variable} ${playfair.variable} h-full bg-[var(--app-bg)] antialiased`}
+      className={cn("h-full", "bg-[var(--app-bg)]", "antialiased", manrope.variable, playfair.variable, "font-sans", geist.variable)}
     >
       <body className="min-h-full bg-[var(--app-bg)] text-[var(--ink-950)]">{children}</body>
     </html>

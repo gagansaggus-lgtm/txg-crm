@@ -1,33 +1,45 @@
 import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return clsx(inputs);
+  return twMerge(clsx(inputs));
 }
 
-export function formatDate(value: string | Date | null | undefined) {
+export function formatDate(value: string | Date | null | undefined): string {
   if (!value) return "—";
   const date = typeof value === "string" ? new Date(value) : value;
   if (Number.isNaN(date.getTime())) return "—";
-  return date.toLocaleDateString(undefined, {
+  return date.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
-    day: "2-digit",
+    day: "numeric",
   });
 }
 
-export function formatDateTime(value: string | Date | null | undefined) {
+export function formatDateTime(value: string | Date | null | undefined): string {
   if (!value) return "—";
   const date = typeof value === "string" ? new Date(value) : value;
   if (Number.isNaN(date.getTime())) return "—";
-  return date.toLocaleString(undefined, {
+  return date.toLocaleString("en-US", {
+    year: "numeric",
     month: "short",
-    day: "2-digit",
-    hour: "2-digit",
+    day: "numeric",
+    hour: "numeric",
     minute: "2-digit",
   });
 }
 
-export function formatCurrency(value: number | null | undefined, currency = "USD") {
-  if (value === null || value === undefined) return "—";
-  return new Intl.NumberFormat(undefined, { style: "currency", currency }).format(value);
+export function formatCurrency(
+  value: number | string | null | undefined,
+  currency: string = "USD",
+): string {
+  if (value === null || value === undefined || value === "") return "—";
+  const amount = typeof value === "string" ? Number(value) : value;
+  if (Number.isNaN(amount)) return "—";
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
 }
