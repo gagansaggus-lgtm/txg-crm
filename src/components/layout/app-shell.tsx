@@ -2,6 +2,7 @@ import { BottomNav } from "@/components/layout/bottom-nav";
 import { MobileHeader } from "@/components/layout/mobile-header";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { AiWidget } from "@/components/ai/ai-widget";
 
 type AppShellProps = {
   children: React.ReactNode;
@@ -19,6 +20,7 @@ export function AppShell({ children, user }: AppShellProps) {
         </main>
       </div>
       <BottomNav />
+      <AiWidget />
       <Toaster richColors position="top-right" />
     </div>
   );

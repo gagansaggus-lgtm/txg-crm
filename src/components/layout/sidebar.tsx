@@ -20,6 +20,9 @@ import {
   ReceiptText,
   UserCog,
   RefreshCcw,
+  Inbox,
+  Megaphone,
+  FolderOpen,
   type LucideIcon,
 } from "lucide-react";
 
@@ -60,6 +63,14 @@ const sections: NavSection[] = [
       { href: "/app/quotes", label: "Quotes", icon: FileText },
       { href: "/app/contracts", label: "Contracts", icon: FileSignature },
       { href: "/app/tickets", label: "Tickets", icon: LifeBuoy },
+    ],
+  },
+  {
+    heading: "Communication",
+    items: [
+      { href: "/app/inbox", label: "Shared inbox", icon: Inbox },
+      { href: "/app/campaigns", label: "Campaigns", icon: Megaphone },
+      { href: "/app/resources", label: "Resource hub", icon: FolderOpen },
     ],
   },
   {
