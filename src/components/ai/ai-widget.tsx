@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 
 type ChatMessage =
   | { id: string; role: "user"; text: string }
-  | { id: string; role: "assistant"; text: string; streaming?: boolean }
+  | { id: string; role: "assistant"; text: string; streaming?: boolean; model?: string }
   | { id: string; role: "tool"; name: string; status: "running" | "done"; summary?: string };
 
 export function AiWidget() {
@@ -84,6 +84,14 @@ export function AiWidget() {
           const payload = JSON.parse(dataLine.slice(5).trim());
           if (eventName === "conversation") {
             setConversationId(payload.conversationId);
+          } else if (eventName === "model") {
+            setMessages((m) =>
+              m.map((msg) =>
+                msg.id === assistantId && msg.role === "assistant"
+                  ? { ...msg, model: payload.model }
+                  : msg,
+              ),
+            );
           } else if (eventName === "delta") {
             setMessages((m) =>
               m.map((msg) =>
@@ -171,7 +179,7 @@ export function AiWidget() {
                   </div>
                   <div>
                     <p className="brand-headline text-sm text-[var(--ink-950)]">TXG Assistant</p>
-                    <p className="text-[11px] text-[var(--ink-500)]">⌘K to toggle · Sonnet 4.6</p>
+                    <p className="text-[11px] text-[var(--ink-500)]">⌘K to toggle · via OpenRouter</p>
                   </div>
                 </div>
                 <button
@@ -191,7 +199,13 @@ export function AiWidget() {
                     m.role === "tool" ? (
                       <ToolRow key={m.id} name={m.name} status={m.status} summary={m.summary} />
                     ) : (
-                      <MessageBubble key={m.id} role={m.role} text={m.text} streaming={"streaming" in m ? m.streaming : undefined} />
+                      <MessageBubble
+                        key={m.id}
+                        role={m.role}
+                        text={m.text}
+                        streaming={m.role === "assistant" ? m.streaming : undefined}
+                        model={m.role === "assistant" ? m.model : undefined}
+                      />
                     ),
                   )
                 )}
@@ -233,9 +247,9 @@ export function AiWidget() {
   );
 }
 
-function MessageBubble({ role, text, streaming }: { role: "user" | "assistant"; text: string; streaming?: boolean }) {
+function MessageBubble({ role, text, streaming, model }: { role: "user" | "assistant"; text: string; streaming?: boolean; model?: string }) {
   return (
-    <div className={cn("flex", role === "user" ? "justify-end" : "justify-start")}>
+    <div className={cn("flex flex-col gap-1", role === "user" ? "items-end" : "items-start")}>
       <div
         className={cn(
           "max-w-[85%] whitespace-pre-wrap rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
@@ -247,6 +261,9 @@ function MessageBubble({ role, text, streaming }: { role: "user" | "assistant"; 
         {text || (streaming ? <span className="text-[var(--ink-500)]">Thinking…</span> : null)}
         {streaming && text ? <span className="ml-0.5 inline-block h-3 w-0.5 animate-pulse bg-current" /> : null}
       </div>
+      {role === "assistant" && model ? (
+        <p className="px-1 text-[10px] uppercase tracking-wide text-[var(--ink-400)]">{model}</p>
+      ) : null}
     </div>
   );
 }

@@ -1,8 +1,11 @@
 import type { CrmSessionContext } from "@/lib/brain/session-context";
 
-// The static primer — changes only on deploys. Keeping this a stable string
-// preserves the prompt cache across conversations.
-const STATIC_PRIMER = `You are the TXG CRM Assistant, embedded in the Transway Xpress Global operations app.
+// Two-block system prompt — lets us cache the stable primer while
+// keeping the live snapshot fresh. The Apr 21 cost audit caught a silent
+// invalidator (generated_at in the cached block), fixed here.
+
+// STATIC — never changes between requests. Cacheable.
+export const STATIC_PRIMER = `You are the TXG CRM Assistant, embedded in the Transway Xpress Global operations app.
 
 Your purpose is to help TXG staff (today: Gagan the founder + Angad the ops lead; later: sales, warehouse, drivers, customer contacts) do their jobs inside this CRM. You are a teammate, not a toy.
 
@@ -20,10 +23,10 @@ You have direct tool access to the CRM's brain:
 When you answer, always ground claims in tool results. If you are guessing, say so.
 
 ## How to help users
-1. **Answer questions** about customers, shipments, orders, and receipts by calling the relevant tool FIRST, then responding.
-2. **Explain how to use the CRM** — if a user asks "how do I add a customer?" or "where is this feature?", give a concise walkthrough with exact menu paths and what happens at each step. The app's main nav sections are: Overview (Dashboard / Pipeline / Tasks), CRM (Customers / Quotes / Contracts / Tickets), Warehouse (Inbound receipts / Fulfillment orders / Shipments / SKUs), Settings (Facilities / Rate cards / Team / WMS sync).
-3. **Recall and save memories.** Before answering anything non-trivial, call \`search_memories\` to check if there's relevant prior knowledge. If the user tells you something you should remember for next time ("Acme always ships Net 30", "Canex wants FedEx only"), call \`remember_fact\` with appropriate importance.
-4. **Surface issues.** If you notice shipment exceptions, overdue tickets, dead sync channels, or stale orders in the session context, mention them proactively.
+1. Answer questions about customers, shipments, orders, and receipts by calling the relevant tool FIRST, then responding.
+2. Explain how to use the CRM — if a user asks "how do I add a customer?" give a concise walkthrough with exact menu paths. The app's main nav: Overview (Dashboard / Pipeline / Tasks), CRM (Customers / Quotes / Contracts / Tickets), Communication (Inbox / Campaigns / Resources), Warehouse (Inbound / Orders / Shipments / SKUs), Settings (Facilities / Rate cards / Team / WMS sync).
+3. Recall and save memories. Before answering anything non-trivial, call search_memories. If the user tells you something to remember ("Acme always ships Net 30"), call remember_fact.
+4. Surface issues. If you notice shipment exceptions, overdue tickets, dead sync channels, or stale orders in the session context, mention them proactively.
 
 ## Style
 - Be concise. Gagan uses voice-to-text while driving — short sentences, bullet lists, no decorative prose.
@@ -39,12 +42,15 @@ When you answer, always ground claims in tool results. If you are guessing, say 
 - If you save a memory, tell the user so they can verify or correct it.
 `;
 
-export function buildSystemPrompt(ctx: CrmSessionContext, pageContext?: { route?: string; entity?: { type: string; id: string } }) {
-  const dynamic = [
-    "",
+// DYNAMIC — changes per request. NOT cached.
+export function buildDynamicContext(
+  ctx: CrmSessionContext,
+  pageContext?: { route?: string; entity?: { type: string; id: string } },
+): string {
+  const lines = [
     "## Current session",
     `Signed in as: ${ctx.identity.fullName ?? ctx.identity.email} (${ctx.identity.role}).`,
-    `Generated at: ${ctx.generatedAt}.`,
+    `Context timestamp: ${ctx.generatedAt}.`,
     "",
     "## Live workspace snapshot",
     `- Active customers: ${ctx.keyNumbers.activeCustomers}`,
@@ -53,32 +59,32 @@ export function buildSystemPrompt(ctx: CrmSessionContext, pageContext?: { route?
     `- Shipments in transit: ${ctx.keyNumbers.shipmentsInTransit}`,
     `- Shipment exceptions: ${ctx.keyNumbers.shipmentExceptions}`,
     `- Open tickets: ${ctx.keyNumbers.openTickets}`,
-    "",
   ];
-
   if (ctx.criticalAlerts.length) {
-    dynamic.push("## Open alerts (proactively surface if relevant)");
+    lines.push("", "## Open alerts (surface proactively when relevant)");
     for (const a of ctx.criticalAlerts) {
-      dynamic.push(`- [${a.severity.toUpperCase()}] ${a.title} (${a.ageMinutes}m ago)`);
-      if (a.description) dynamic.push(`    ${a.description}`);
+      lines.push(`- [${a.severity.toUpperCase()}] ${a.title} (${a.ageMinutes}m ago)`);
+      if (a.description) lines.push(`    ${a.description}`);
     }
-    dynamic.push("");
   }
-
   if (ctx.deadChannels.length) {
-    dynamic.push("## Dead channels (do not trust stale data from these)");
-    for (const c of ctx.deadChannels) dynamic.push(`- ${c}`);
-    dynamic.push("");
+    lines.push("", "## Dead channels (do not trust stale data from these)");
+    for (const c of ctx.deadChannels) lines.push(`- ${c}`);
   }
-
   if (pageContext?.route) {
-    dynamic.push(`## User is currently viewing: ${pageContext.route}`);
+    lines.push("", `## User is viewing: ${pageContext.route}`);
     if (pageContext.entity) {
-      dynamic.push(`Entity context: ${pageContext.entity.type} ${pageContext.entity.id}`);
-      dynamic.push("Prefer answering in the context of this entity when reasonable.");
+      lines.push(`Entity: ${pageContext.entity.type} ${pageContext.entity.id}`);
+      lines.push("Prefer answering in the context of this entity when reasonable.");
     }
-    dynamic.push("");
   }
+  return lines.join("\n");
+}
 
-  return STATIC_PRIMER + dynamic.join("\n");
+// Legacy shim — some older code may import buildSystemPrompt; keep the concat for them.
+export function buildSystemPrompt(
+  ctx: CrmSessionContext,
+  pageContext?: { route?: string; entity?: { type: string; id: string } },
+) {
+  return STATIC_PRIMER + "\n\n" + buildDynamicContext(ctx, pageContext);
 }

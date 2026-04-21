@@ -1,17 +1,18 @@
 import { NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { loadWorkspaceContext } from "@/lib/supabase/workspace";
 import { getCrmSessionContext } from "@/lib/brain/session-context";
-import { buildSystemPrompt } from "@/lib/ai/system-prompt";
-import { CRM_TOOLS, runTool } from "@/lib/ai/tools";
+import { STATIC_PRIMER, buildDynamicContext } from "@/lib/ai/system-prompt";
+import { runTool } from "@/lib/ai/tools";
+import { CRM_TOOLS_OPENAI } from "@/lib/ai/openai-tools";
+import { pickModel } from "@/lib/ai/model-router";
 import { heartbeat } from "@/lib/brain/channel-health";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const MODEL = "claude-sonnet-4-6";
 const MAX_TOKENS = 4096;
 const MAX_TOOL_ITERATIONS = 6;
 
@@ -28,10 +29,10 @@ export async function POST(req: Request) {
   const body = (await req.json()) as ChatRequestBody;
   if (!body.message?.trim()) return NextResponse.json({ error: "empty message" }, { status: 400 });
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
-      { error: "AI not configured. Set ANTHROPIC_API_KEY in Vercel env vars to enable." },
+      { error: "AI not configured. Set OPENROUTER_API_KEY in Vercel env vars." },
       { status: 503 },
     );
   }
@@ -51,54 +52,69 @@ export async function POST(req: Request) {
       })
       .select("id")
       .single();
-    if (error || !conv) {
-      return NextResponse.json({ error: error?.message ?? "could not create conversation" }, { status: 500 });
-    }
+    if (error || !conv) return NextResponse.json({ error: error?.message ?? "conv create failed" }, { status: 500 });
     conversationId = conv.id;
   }
 
-  // Load message history (last 40) for context continuity
+  // Load last 12 messages for context (trimmed from 40 per the cost audit)
   const { data: history } = await supabase
     .from("ai_messages")
-    .select("role, content, tool_calls, tool_name, tool_input, tool_result")
+    .select("role, content")
     .eq("conversation_id", conversationId)
     .order("created_at", { ascending: true })
-    .limit(40);
+    .limit(12);
 
-  // Build Anthropic messages array from history + new user message
-  type AnthropicMessage = Anthropic.MessageParam;
-  const priorMessages: AnthropicMessage[] = [];
-  for (const row of history ?? []) {
-    if (row.role === "user" && row.content) {
-      priorMessages.push({ role: "user", content: row.content });
-    } else if (row.role === "assistant") {
-      // Stored assistant content was plain text — rehydrate as text block
-      if (row.content) priorMessages.push({ role: "assistant", content: row.content });
-    }
-    // Tool rounds aren't replayed into the next request — they'd bloat context.
-    // Full agentic replay happens within a single request iteration only.
-  }
+  type ChatMessage = OpenAI.Chat.Completions.ChatCompletionMessageParam;
 
-  // Persist user message BEFORE streaming so it's always durable
+  const priorMessages: ChatMessage[] = (history ?? [])
+    .filter((m) => m.content && (m.role === "user" || m.role === "assistant"))
+    .map((m) => ({ role: m.role as "user" | "assistant", content: m.content as string }));
+
+  // Persist user message before streaming
   await supabase.from("ai_messages").insert({
     conversation_id: conversationId,
     role: "user",
     content: body.message,
   });
 
+  // Pick model by intent, assemble session context
+  const route = pickModel(body.message);
   const sessionContext = await getCrmSessionContext(supabase, ctx.workspaceId, {
     id: ctx.user.id,
     email: ctx.user.email,
     fullName: ctx.user.fullName,
     role: ctx.role,
   });
-  const systemPrompt = buildSystemPrompt(sessionContext, body.pageContext);
+  const dynamicContext = buildDynamicContext(sessionContext, body.pageContext);
 
-  const client = new Anthropic({ apiKey });
+  const client = new OpenAI({
+    apiKey,
+    baseURL: "https://openrouter.ai/api/v1",
+    defaultHeaders: {
+      "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL ?? "https://txg-crm.vercel.app",
+      "X-Title": "TXG CRM",
+    },
+  });
 
-  const messages: AnthropicMessage[] = [...priorMessages, { role: "user", content: body.message }];
+  // Two-block system: stable primer (cached) + dynamic context (fresh).
+  // OpenRouter exposes Anthropic's cache_control via message-level annotations.
+  type SystemContent = { type: "text"; text: string; cache_control?: { type: "ephemeral" } };
+  const systemContent: SystemContent[] = [
+    ...(route.cacheable
+      ? [{ type: "text" as const, text: STATIC_PRIMER, cache_control: { type: "ephemeral" as const } }]
+      : [{ type: "text" as const, text: STATIC_PRIMER }]),
+    { type: "text" as const, text: dynamicContext },
+  ];
+
+  const messages: ChatMessage[] = [
+    { role: "system", content: systemContent as unknown as string },
+    ...priorMessages,
+    { role: "user", content: body.message },
+  ];
 
   const encoder = new TextEncoder();
+  let totalTokensUsed = 0;
+
   const stream = new ReadableStream({
     async start(controller) {
       const send = (event: string, data: unknown) => {
@@ -106,76 +122,111 @@ export async function POST(req: Request) {
       };
 
       send("conversation", { conversationId });
+      send("model", { model: route.model, reasoning: route.reasoning });
 
       let finalText = "";
       try {
         for (let iter = 0; iter < MAX_TOOL_ITERATIONS; iter++) {
-          const msgStream = client.messages.stream({
-            model: MODEL,
+          const completion = await client.chat.completions.create({
+            model: route.model,
             max_tokens: MAX_TOKENS,
-            system: systemPrompt,
-            cache_control: { type: "ephemeral" },
-            tools: CRM_TOOLS as unknown as Anthropic.Tool[],
             messages,
-            thinking: { type: "adaptive" },
+            tools: CRM_TOOLS_OPENAI,
+            stream: true,
+            stream_options: { include_usage: true },
           });
 
-          for await (const event of msgStream) {
-            if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
-              send("delta", { text: event.delta.text });
+          // Accumulate text + tool_calls from the stream
+          let assistantText = "";
+          const toolCallsAccum: Record<
+            number,
+            { id?: string; name?: string; argsBuffer: string }
+          > = {};
+          let stopReason: string | null = null;
+
+          for await (const chunk of completion) {
+            const choice = chunk.choices?.[0];
+            if (!choice) continue;
+            const delta = choice.delta;
+            if (delta?.content) {
+              assistantText += delta.content;
+              send("delta", { text: delta.content });
+            }
+            if (delta?.tool_calls) {
+              for (const tc of delta.tool_calls) {
+                const idx = tc.index ?? 0;
+                const slot = (toolCallsAccum[idx] ??= { argsBuffer: "" });
+                if (tc.id) slot.id = tc.id;
+                if (tc.function?.name) slot.name = tc.function.name;
+                if (tc.function?.arguments) slot.argsBuffer += tc.function.arguments;
+              }
+            }
+            if (choice.finish_reason) stopReason = choice.finish_reason;
+            if ("usage" in chunk && chunk.usage) {
+              totalTokensUsed = (chunk.usage.total_tokens ?? 0);
             }
           }
 
-          const final = await msgStream.finalMessage();
-
-          const assistantText = final.content
-            .filter((b): b is Anthropic.TextBlock => b.type === "text")
-            .map((b) => b.text)
-            .join("");
           if (assistantText) finalText += assistantText;
 
-          if (final.stop_reason !== "tool_use") {
-            // Done — append the assistant turn to messages for completeness and break.
-            messages.push({ role: "assistant", content: final.content });
+          const pendingToolCalls = Object.values(toolCallsAccum).filter((t) => t.id && t.name);
+          if (stopReason !== "tool_calls" && pendingToolCalls.length === 0) {
+            // Done
             break;
           }
 
-          // Execute each tool_use block and feed results back
-          messages.push({ role: "assistant", content: final.content });
-          const toolUses = final.content.filter((b): b is Anthropic.ToolUseBlock => b.type === "tool_use");
-          const toolResults: Anthropic.ToolResultBlockParam[] = [];
-          for (const tu of toolUses) {
-            send("tool_use", { id: tu.id, name: tu.name, input: tu.input });
+          // Replay assistant turn with tool_calls
+          messages.push({
+            role: "assistant",
+            content: assistantText || null,
+            tool_calls: pendingToolCalls.map((t) => ({
+              id: t.id!,
+              type: "function" as const,
+              function: { name: t.name!, arguments: t.argsBuffer || "{}" },
+            })),
+          });
+
+          for (const tc of pendingToolCalls) {
+            let parsedArgs: Record<string, unknown> = {};
+            try {
+              parsedArgs = tc.argsBuffer ? JSON.parse(tc.argsBuffer) : {};
+            } catch {
+              parsedArgs = {};
+            }
+            send("tool_use", { id: tc.id, name: tc.name, input: parsedArgs });
             let result: unknown;
             try {
               result = await runTool(
                 supabase,
                 ctx.workspaceId,
                 ctx.user.id,
-                tu.name,
-                (tu.input as Record<string, unknown>) ?? {},
+                tc.name!,
+                parsedArgs,
                 conversationId!,
               );
             } catch (err) {
-              result = { error: err instanceof Error ? err.message : "tool execution failed" };
+              result = { error: err instanceof Error ? err.message : "tool failed" };
             }
-            send("tool_result", { id: tu.id, name: tu.name, result });
-            toolResults.push({
-              type: "tool_result",
-              tool_use_id: tu.id,
+            send("tool_result", { id: tc.id, name: tc.name, result });
+            messages.push({
+              role: "tool",
+              tool_call_id: tc.id!,
               content: JSON.stringify(result),
             });
           }
-          messages.push({ role: "user", content: toolResults });
         }
 
-        // Persist final assistant message
+        // Persist final assistant message with model metadata
         if (finalText) {
           await supabase.from("ai_messages").insert({
             conversation_id: conversationId,
             role: "assistant",
             content: finalText,
-            metadata: { model: MODEL },
+            metadata: {
+              model: route.model,
+              routing_reason: route.reasoning,
+              total_tokens: totalTokensUsed,
+            },
           });
           await supabase
             .from("ai_conversations")
@@ -183,7 +234,7 @@ export async function POST(req: Request) {
             .eq("id", conversationId);
         }
 
-        send("done", { conversationId });
+        send("done", { conversationId, model: route.model, tokens: totalTokensUsed });
       } catch (err) {
         console.error("[ai-chat] error:", err);
         send("error", { message: err instanceof Error ? err.message : "chat failed" });
