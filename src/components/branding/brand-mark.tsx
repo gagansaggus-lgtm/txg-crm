@@ -7,15 +7,19 @@ type BrandMarkProps = {
 export function BrandMark({ compact = false }: BrandMarkProps) {
   return (
     <div className="flex items-center gap-3">
-      <div className="grid h-12 w-12 place-items-center rounded-2xl bg-[var(--surface-ink)] text-sm font-bold uppercase tracking-[0.18em] text-white shadow-[var(--shadow-card)]">
-        TXG
+      <div className="relative grid h-12 w-12 place-items-center overflow-hidden rounded-xl bg-[var(--ink-950)] shadow-[var(--shadow-card)]">
+        <span className="brand-display text-base leading-none text-white">TXG</span>
+        <span
+          aria-hidden
+          className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-[var(--accent-600)]"
+        />
       </div>
-      <div className={cn("space-y-1", compact ? "" : "max-w-sm")}>
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--accent-600)]">
+      <div className={cn("space-y-0.5", compact ? "" : "max-w-sm")}>
+        <p className="brand-display text-base leading-tight text-[var(--ink-950)]">
           Transway Xpress Global
         </p>
-        <p className="text-sm text-[var(--ink-700)]">
-          Warehousing · Fulfillment · Last-mile · International courier
+        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--accent-600)]">
+          ePowering fulfillment globally
         </p>
       </div>
     </div>
