@@ -1,5 +1,5 @@
 import { PageHeader } from "@/components/layout/page-header";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { CustomerForm } from "@/components/customers/customer-form";
 import { loadWorkspaceContext } from "@/lib/supabase/workspace";
 
@@ -8,10 +8,16 @@ export default async function NewCustomerPage() {
   if (!ctx) return null;
 
   return (
-    <div className="space-y-5">
-      <PageHeader eyebrow="CRM" title="Add customer" subtitle="Start with the basics. You can edit everything later." />
+    <div className="space-y-6">
+      <PageHeader
+        eyebrow="CRM"
+        title="Add customer"
+        subtitle="Start with the basics. You can edit everything later."
+      />
       <Card>
-        <CustomerForm workspaceId={ctx.workspaceId} />
+        <CardContent>
+          <CustomerForm workspaceId={ctx.workspaceId} />
+        </CardContent>
       </Card>
     </div>
   );

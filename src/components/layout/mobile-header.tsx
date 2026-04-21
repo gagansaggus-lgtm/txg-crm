@@ -7,15 +7,15 @@ type MobileHeaderProps = {
 
 export function MobileHeader({ user }: MobileHeaderProps) {
   return (
-    <header className="sticky top-0 z-30 border-b border-[var(--line-soft)] bg-white/90 backdrop-blur-xl">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
-        <BrandMark />
-        <div className="flex items-center justify-between gap-4 rounded-[1.25rem] bg-white/80 px-4 py-3 shadow-[var(--shadow-card)]">
-          <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-[var(--surface-ink)]">
+    <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-white/90 backdrop-blur-xl lg:hidden">
+      <div className="flex items-center justify-between px-4 py-3 sm:px-6">
+        <BrandMark compact />
+        <div className="flex items-center gap-2">
+          <div className="hidden min-w-0 text-right sm:block">
+            <p className="truncate text-xs font-semibold text-[var(--ink-950)]">
               {user.fullName || "TXG teammate"}
             </p>
-            <p className="truncate text-xs text-[var(--ink-500)]">{user.email}</p>
+            <p className="truncate text-[10px] text-[var(--ink-500)]">{user.email}</p>
           </div>
           <SignOutButton />
         </div>

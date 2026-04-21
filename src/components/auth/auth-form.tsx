@@ -2,8 +2,20 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { BrandMark } from "@/components/branding/brand-mark";
 import { hasSupabaseEnv } from "@/lib/env";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
@@ -16,145 +28,181 @@ type AuthFormProps = {
   description: string;
 };
 
+const loginSchema = z.object({
+  email: z.string().email("Enter a valid email"),
+  password: z.string().min(1, "Password is required"),
+});
+
+const signupSchema = z.object({
+  fullName: z.string().min(1, "Enter your full name"),
+  email: z.string().email("Enter a valid email"),
+  password: z.string().min(8, "At least 8 characters"),
+});
+
+const resetSchema = z.object({
+  email: z.string().email("Enter a valid email"),
+});
+
 export function AuthForm({ mode, title, description }: AuthFormProps) {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
 
-  function handleSubmit(formData: FormData) {
-    startTransition(async () => {
-      setError(null);
-      setMessage(null);
+  type Values = z.infer<typeof signupSchema> &
+    z.infer<typeof loginSchema> &
+    z.infer<typeof resetSchema>;
+  const schema = mode === "login" ? loginSchema : mode === "signup" ? signupSchema : resetSchema;
 
-      if (!hasSupabaseEnv) {
-        setError("Add your Supabase URL and anon key before using auth.");
+  const form = useForm<Values>({
+    resolver: zodResolver(schema as typeof signupSchema),
+    defaultValues: { email: "", password: "", fullName: "" },
+  });
+
+  const { errors, isSubmitting } = form.formState;
+
+  async function onSubmit(values: Values) {
+    if (!hasSupabaseEnv) {
+      toast.error("Missing Supabase env", {
+        description: "Add your Supabase URL and anon key before using auth.",
+      });
+      return;
+    }
+
+    const supabase = createSupabaseBrowserClient();
+
+    if (mode === "login") {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: values.email,
+        password: values.password,
+      });
+      if (error) {
+        toast.error("Sign-in failed", { description: error.message });
         return;
       }
+      toast.success("Welcome back");
+      router.replace("/app");
+      router.refresh();
+      return;
+    }
 
-      const email = String(formData.get("email") ?? "").trim();
-      const password = String(formData.get("password") ?? "").trim();
-      const fullName = String(formData.get("fullName") ?? "").trim();
-      const supabase = createSupabaseBrowserClient();
-
-      if (mode === "login") {
-        const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-        if (signInError) {
-          setError(signInError.message);
-          return;
-        }
+    if (mode === "signup") {
+      const redirectTo = `${window.location.origin}/auth/callback`;
+      const { data, error } = await supabase.auth.signUp({
+        email: values.email,
+        password: values.password,
+        options: { emailRedirectTo: redirectTo, data: { full_name: values.fullName } },
+      });
+      if (error) {
+        toast.error("Signup failed", { description: error.message });
+        return;
+      }
+      if (data.session) {
+        toast.success("Account created");
         router.replace("/app");
         router.refresh();
         return;
       }
+      toast.info("Check your email", {
+        description: "Confirm your email, then an admin will add you to the TXG workspace.",
+        duration: 8000,
+      });
+      return;
+    }
 
-      if (mode === "signup") {
-        const redirectTo = `${window.location.origin}/auth/callback`;
-        const { data, error: signUpError } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { emailRedirectTo: redirectTo, data: { full_name: fullName } },
-        });
-        if (signUpError) {
-          setError(signUpError.message);
-          return;
-        }
-        if (data.session) {
-          router.replace("/app");
-          router.refresh();
-          return;
-        }
-        setMessage("Account created. Check your email if confirmation is required in Supabase. Then run 0007_seed.sql to add yourself to the TXG workspace.");
-        return;
-      }
-
-      const redirectTo = `${window.location.origin}/auth/callback?next=/login`;
-      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
-      if (resetError) {
-        setError(resetError.message);
-        return;
-      }
-      setMessage("Password reset email sent. Check your inbox.");
-    });
+    const redirectTo = `${window.location.origin}/auth/callback?next=/login`;
+    const { error } = await supabase.auth.resetPasswordForEmail(values.email, { redirectTo });
+    if (error) {
+      toast.error("Reset failed", { description: error.message });
+      return;
+    }
+    toast.success("Reset email sent", { description: "Check your inbox for the reset link." });
   }
 
-  return (
-    <section className="glass-panel w-full max-w-xl rounded-[2rem] p-6 sm:p-8">
-      <div className="space-y-6">
-        <BrandMark compact />
+  const ctaLabel =
+    isSubmitting
+      ? "Working…"
+      : mode === "login"
+        ? "Sign in"
+        : mode === "signup"
+          ? "Create account"
+          : "Send reset email";
 
-        <div className="space-y-2">
-          <h1 className="text-3xl font-semibold tracking-tight text-[var(--surface-ink)]">{title}</h1>
-          <p className="text-sm leading-7 text-[var(--ink-700)]">{description}</p>
+  return (
+    <section className="w-full max-w-md rounded-3xl border border-[var(--border)] bg-[var(--card)] p-7 shadow-[var(--shadow-soft)] sm:p-9">
+      <div className="space-y-7">
+        <div className="flex lg:hidden">
+          <BrandMark compact />
         </div>
 
-        <form action={handleSubmit} className="space-y-4">
-          {mode === "signup" ? (
-            <label className="block space-y-2">
-              <span className="text-sm font-medium text-[var(--surface-ink)]">Full name</span>
-              <input
-                name="fullName"
-                type="text"
-                placeholder="Your full name"
-                className="w-full rounded-2xl border border-[var(--line-soft)] bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--accent-500)]"
+        <div className="space-y-2">
+          <h1 className="brand-display text-3xl leading-tight tracking-tight text-[var(--ink-950)] sm:text-4xl">
+            {title}
+          </h1>
+          <p className="text-sm leading-6 text-[var(--ink-700)]">{description}</p>
+        </div>
+
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FieldGroup>
+            {mode === "signup" ? (
+              <Field data-invalid={errors.fullName ? "true" : undefined}>
+                <FieldLabel htmlFor="fullName">Full name</FieldLabel>
+                <Input id="fullName" placeholder="Your full name" {...form.register("fullName")} />
+                <FieldError errors={errors.fullName ? [errors.fullName] : undefined} />
+              </Field>
+            ) : null}
+
+            <Field data-invalid={errors.email ? "true" : undefined}>
+              <FieldLabel htmlFor="email">Email</FieldLabel>
+              <Input
+                id="email"
+                type="email"
+                autoComplete="email"
+                placeholder="you@transwayxpress.com"
+                {...form.register("email")}
               />
-            </label>
-          ) : null}
+              <FieldError errors={errors.email ? [errors.email] : undefined} />
+            </Field>
 
-          <label className="block space-y-2">
-            <span className="text-sm font-medium text-[var(--surface-ink)]">Email</span>
-            <input
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              placeholder="you@txg.com"
-              className="w-full rounded-2xl border border-[var(--line-soft)] bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--accent-500)]"
-            />
-          </label>
+            {mode !== "reset" ? (
+              <Field data-invalid={errors.password ? "true" : undefined}>
+                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <Input
+                  id="password"
+                  type="password"
+                  autoComplete={mode === "login" ? "current-password" : "new-password"}
+                  placeholder="Enter your password"
+                  {...form.register("password")}
+                />
+                <FieldError errors={errors.password ? [errors.password] : undefined} />
+              </Field>
+            ) : null}
+          </FieldGroup>
 
-          {mode !== "reset" ? (
-            <label className="block space-y-2">
-              <span className="text-sm font-medium text-[var(--surface-ink)]">Password</span>
-              <input
-                name="password"
-                type="password"
-                autoComplete={mode === "login" ? "current-password" : "new-password"}
-                required
-                placeholder="Enter your password"
-                className="w-full rounded-2xl border border-[var(--line-soft)] bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--accent-500)]"
-              />
-            </label>
-          ) : null}
-
-          {error ? (
-            <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>
-          ) : null}
-
-          {message ? (
-            <div className="rounded-2xl border border-[var(--warning-100)] bg-[var(--warning-100)] px-4 py-3 text-sm text-[var(--warning-700)]">
-              {message}
-            </div>
-          ) : null}
-
-          <button
-            type="submit"
-            disabled={isPending}
-            className="inline-flex w-full items-center justify-center rounded-full bg-[var(--surface-ink)] px-5 py-3 text-sm font-semibold text-white transition hover:opacity-92 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {isPending ? "Working..." : mode === "login" ? "Sign in" : mode === "signup" ? "Create account" : "Send reset email"}
-          </button>
+          <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {ctaLabel}
+              </>
+            ) : (
+              ctaLabel
+            )}
+          </Button>
         </form>
 
-        <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-[var(--ink-700)]">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
           {mode !== "login" ? (
-            <Link href="/login" className="font-medium text-[var(--accent-600)]">Already have an account?</Link>
+            <Link href="/login" className="font-medium text-[var(--accent-600)] hover:underline">
+              Already have an account?
+            </Link>
           ) : null}
           {mode !== "signup" ? (
-            <Link href="/signup" className="font-medium text-[var(--accent-600)]">Create an account</Link>
+            <Link href="/signup" className="font-medium text-[var(--accent-600)] hover:underline">
+              Create an account
+            </Link>
           ) : null}
           {mode !== "reset" ? (
-            <Link href="/reset-password" className="font-medium text-[var(--accent-600)]">Reset password</Link>
+            <Link href="/reset-password" className="font-medium text-[var(--ink-500)] hover:text-[var(--accent-600)]">
+              Forgot password?
+            </Link>
           ) : null}
         </div>
       </div>

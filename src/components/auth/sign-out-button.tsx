@@ -2,7 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
+import { LogOut } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 export function SignOutButton() {
@@ -10,8 +12,10 @@ export function SignOutButton() {
   const [isPending, startTransition] = useTransition();
 
   return (
-    <button
+    <Button
       type="button"
+      variant="outline"
+      size="sm"
       disabled={isPending}
       onClick={() =>
         startTransition(async () => {
@@ -21,9 +25,9 @@ export function SignOutButton() {
           router.refresh();
         })
       }
-      className="rounded-full border border-[var(--line-strong)] bg-white px-4 py-2 text-sm font-medium text-[var(--ink-700)] transition hover:border-[var(--accent-500)] hover:text-[var(--accent-600)] disabled:opacity-60"
     >
-      {isPending ? "Signing out..." : "Sign out"}
-    </button>
+      <LogOut className="h-3.5 w-3.5" />
+      {isPending ? "Signing out…" : "Sign out"}
+    </Button>
   );
 }
