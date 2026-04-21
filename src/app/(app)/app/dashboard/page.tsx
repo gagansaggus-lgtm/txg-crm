@@ -17,6 +17,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { StatCard } from "@/components/ui/stat-card";
 import { buttonVariants } from "@/components/ui/button";
+import { StaggerContainer, StaggerItem, FadeInUp } from "@/components/ui/motion-stagger";
 import { cn, formatDateTime } from "@/lib/utils";
 import { getDashboardSnapshot } from "@/lib/supabase/queries/dashboard";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -53,50 +54,62 @@ export default async function DashboardPage() {
         align="hero"
       />
 
-      <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        <StatCard
-          label="Open receipts"
-          value={snap.receipts.open}
-          hint={`${snap.receipts.today} expected today`}
-          href="/app/warehouse/inbound"
-          tone="accent"
-        />
-        <StatCard
-          label="Pending orders"
-          value={snap.orders.pending}
-          hint={`${snap.orders.today} due today`}
-          href="/app/warehouse/orders"
-          tone="accent"
-        />
-        <StatCard
-          label="Shipped today"
-          value={snap.shipments.outToday}
-          hint={`${snap.shipments.inTransit} in transit`}
-          href="/app/warehouse/shipments"
-        />
-        <StatCard
-          label="Exceptions"
-          value={snap.shipments.exceptions}
-          hint="Shipment issues"
-          href="/app/warehouse/shipments"
-          tone={snap.shipments.exceptions > 0 ? "danger" : "neutral"}
-        />
-        <StatCard
-          label="Open tickets"
-          value={snap.tickets.open}
-          hint={`${snap.tickets.overdue} overdue`}
-          href="/app/tickets"
-          tone={snap.tickets.overdue > 0 ? "warn" : "neutral"}
-        />
-        <StatCard
-          label="Active customers"
-          value={snap.customers.active}
-          hint={`${snap.customers.total} total`}
-          href="/app/customers"
-        />
-      </section>
+      <StaggerContainer className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        <StaggerItem>
+          <StatCard
+            label="Open receipts"
+            value={snap.receipts.open}
+            hint={`${snap.receipts.today} expected today`}
+            href="/app/warehouse/inbound"
+            tone="accent"
+          />
+        </StaggerItem>
+        <StaggerItem>
+          <StatCard
+            label="Pending orders"
+            value={snap.orders.pending}
+            hint={`${snap.orders.today} due today`}
+            href="/app/warehouse/orders"
+            tone="accent"
+          />
+        </StaggerItem>
+        <StaggerItem>
+          <StatCard
+            label="Shipped today"
+            value={snap.shipments.outToday}
+            hint={`${snap.shipments.inTransit} in transit`}
+            href="/app/warehouse/shipments"
+          />
+        </StaggerItem>
+        <StaggerItem>
+          <StatCard
+            label="Exceptions"
+            value={snap.shipments.exceptions}
+            hint="Shipment issues"
+            href="/app/warehouse/shipments"
+            tone={snap.shipments.exceptions > 0 ? "danger" : "neutral"}
+          />
+        </StaggerItem>
+        <StaggerItem>
+          <StatCard
+            label="Open tickets"
+            value={snap.tickets.open}
+            hint={`${snap.tickets.overdue} overdue`}
+            href="/app/tickets"
+            tone={snap.tickets.overdue > 0 ? "warn" : "neutral"}
+          />
+        </StaggerItem>
+        <StaggerItem>
+          <StatCard
+            label="Active customers"
+            value={snap.customers.active}
+            hint={`${snap.customers.total} total`}
+            href="/app/customers"
+          />
+        </StaggerItem>
+      </StaggerContainer>
 
-      <section className="grid gap-5 lg:grid-cols-3">
+      <FadeInUp delay={0.3} className="grid gap-5 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardContent className="space-y-4">
             <div className="flex items-start justify-between gap-4">
@@ -155,7 +168,7 @@ export default async function DashboardPage() {
             </div>
           </CardContent>
         </Card>
-      </section>
+      </FadeInUp>
     </div>
   );
 }

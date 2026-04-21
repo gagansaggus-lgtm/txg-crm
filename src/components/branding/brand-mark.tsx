@@ -1,27 +1,28 @@
+import Image from "next/image";
+
 import { cn } from "@/lib/utils";
 
 type BrandMarkProps = {
   compact?: boolean;
+  variant?: "default" | "light";
+  className?: string;
 };
 
-export function BrandMark({ compact = false }: BrandMarkProps) {
+export function BrandMark({ compact = false, variant = "default", className }: BrandMarkProps) {
+  const src =
+    variant === "light" ? "/brand/transway-logo-white.png" : "/brand/transway-logo.png";
+
   return (
-    <div className="flex items-center gap-3">
-      <div className="relative grid h-12 w-12 place-items-center overflow-hidden rounded-xl bg-[var(--ink-950)] shadow-[var(--shadow-card)]">
-        <span className="brand-display text-base leading-none text-white">TXG</span>
-        <span
-          aria-hidden
-          className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-[var(--accent-600)]"
-        />
-      </div>
-      <div className={cn("space-y-0.5", compact ? "" : "max-w-sm")}>
-        <p className="brand-display text-base leading-tight text-[var(--ink-950)]">
-          Transway Xpress Global
-        </p>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--accent-600)]">
-          ePowering fulfillment globally
-        </p>
-      </div>
+    <div className={cn("flex items-center gap-3", className)}>
+      <Image
+        src={src}
+        alt="Transway Xpress Global"
+        width={compact ? 120 : 148}
+        height={compact ? 36 : 44}
+        priority
+        className="h-auto w-auto"
+        style={{ width: compact ? 120 : 148, height: "auto" }}
+      />
     </div>
   );
 }
