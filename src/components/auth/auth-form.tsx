@@ -126,17 +126,20 @@ export function AuthForm({ mode, title, description }: AuthFormProps) {
           : "Send reset email";
 
   return (
-    <section className="w-full max-w-md rounded-3xl border border-[var(--border)] bg-[var(--card)] p-7 shadow-[var(--shadow-soft)] sm:p-9">
-      <div className="space-y-7">
+    <section className="w-full max-w-md rounded-2xl border border-[var(--line-soft)] bg-[var(--card)] p-8 shadow-[var(--shadow-soft)]">
+      <div className="space-y-6">
         <div className="flex lg:hidden">
           <BrandMark compact />
         </div>
 
-        <div className="space-y-2">
-          <h1 className="brand-display text-3xl leading-tight tracking-tight text-[var(--ink-950)] sm:text-4xl">
+        <div className="space-y-1.5">
+          <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--ink-400)]">
+            Transway Xpress Global
+          </p>
+          <h1 className="brand-headline text-[28px] leading-tight text-[var(--ink-950)]">
             {title}
           </h1>
-          <p className="text-sm leading-6 text-[var(--ink-700)]">{description}</p>
+          <p className="text-sm text-[var(--ink-500)]">{description}</p>
         </div>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -150,7 +153,7 @@ export function AuthForm({ mode, title, description }: AuthFormProps) {
             ) : null}
 
             <Field data-invalid={errors.email ? "true" : undefined}>
-              <FieldLabel htmlFor="email">Email</FieldLabel>
+              <FieldLabel htmlFor="email">Email address</FieldLabel>
               <Input
                 id="email"
                 type="email"
@@ -176,7 +179,7 @@ export function AuthForm({ mode, title, description }: AuthFormProps) {
             ) : null}
           </FieldGroup>
 
-          <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+          <Button type="submit" className="h-10 w-full rounded-xl text-sm font-semibold shadow-[var(--shadow-cta)]" disabled={isSubmitting}>
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -191,20 +194,21 @@ export function AuthForm({ mode, title, description }: AuthFormProps) {
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
           {mode !== "login" ? (
             <Link href="/login" className="font-medium text-[var(--accent-600)] hover:underline">
-              Already have an account?
-            </Link>
-          ) : null}
-          {mode !== "signup" ? (
-            <Link href="/signup" className="font-medium text-[var(--accent-600)] hover:underline">
-              Create an account
+              Back to sign in
             </Link>
           ) : null}
           {mode !== "reset" ? (
-            <Link href="/reset-password" className="font-medium text-[var(--ink-500)] hover:text-[var(--accent-600)]">
+            <Link href="/reset-password" className="text-[var(--ink-500)] hover:text-[var(--accent-600)]">
               Forgot password?
             </Link>
           ) : null}
         </div>
+
+        {mode === "login" ? (
+          <p className="text-center text-[11px] text-[var(--ink-400)]">
+            Access is by invitation only. Contact your admin to join.
+          </p>
+        ) : null}
       </div>
     </section>
   );

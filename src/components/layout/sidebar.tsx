@@ -114,15 +114,15 @@ export function Sidebar({ user }: SidebarProps) {
     .join("");
 
   return (
-    <aside className="sticky top-0 hidden h-screen w-[260px] shrink-0 flex-col border-r border-[var(--border)] bg-[var(--card)] lg:flex">
-      <div className="px-5 py-6">
+    <aside className="sticky top-0 hidden h-screen w-[260px] shrink-0 flex-col border-r border-[var(--line-soft)] bg-[var(--card)] lg:flex">
+      <div className="px-5 py-5 border-b border-[var(--line-soft)]">
         <BrandMark />
       </div>
-      <nav className="flex-1 overflow-y-auto px-3 pb-4">
-        <div className="space-y-6">
+      <nav className="flex-1 overflow-y-auto px-3 pb-4 pt-3">
+        <div className="space-y-5">
           {sections.map((section) => (
-            <div key={section.heading} className="space-y-1">
-              <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--ink-500)]">
+            <div key={section.heading} className="space-y-0.5">
+              <p className="px-3 pb-1 text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--ink-400)]">
                 {section.heading}
               </p>
               <ul className="space-y-0.5">
@@ -130,22 +130,28 @@ export function Sidebar({ user }: SidebarProps) {
                   const active = isActive(pathname, item);
                   const Icon = item.icon;
                   return (
-                    <li key={item.href}>
+                    <li key={item.href} className="relative">
                       <Link
                         href={item.href}
                         className={cn(
-                          "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition",
+                          "group flex items-center gap-2.5 rounded-lg px-3 py-[7px] text-[13px] font-medium transition-colors",
                           active
-                            ? "bg-[var(--accent-100)] text-[var(--accent-700)]"
-                            : "text-[var(--ink-700)] hover:bg-[var(--secondary)] hover:text-[var(--ink-950)]",
+                            ? "bg-[var(--accent-100)] text-[var(--ink-950)] font-semibold"
+                            : "text-[var(--ink-700)] hover:bg-[var(--surface-soft)] hover:text-[var(--ink-950)]",
                         )}
                       >
+                        {active && (
+                          <span
+                            aria-hidden="true"
+                            className="pointer-events-none absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-[var(--accent-600)]"
+                          />
+                        )}
                         <Icon
                           className={cn(
-                            "h-4 w-4 shrink-0 transition",
+                            "h-[15px] w-[15px] shrink-0 transition-colors",
                             active
                               ? "text-[var(--accent-600)]"
-                              : "text-[var(--ink-500)] group-hover:text-[var(--ink-950)]",
+                              : "text-[var(--ink-400)] group-hover:text-[var(--ink-700)]",
                           )}
                           strokeWidth={1.8}
                         />
@@ -159,19 +165,19 @@ export function Sidebar({ user }: SidebarProps) {
           ))}
         </div>
       </nav>
-      <div className="border-t border-[var(--border)] p-4">
-        <div className="flex items-center gap-3">
-          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--ink-950)] text-xs font-semibold uppercase text-white">
+      <div className="border-t border-[var(--line-soft)] p-4">
+        <div className="flex items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-[var(--surface-soft)] transition-colors cursor-default">
+          <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[var(--accent-600)] text-[10px] font-bold uppercase text-white shadow-[0_1px_4px_rgba(247,89,40,0.3)]">
             {initials || "TX"}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-[var(--ink-950)]">
+            <p className="truncate text-[13px] font-semibold text-[var(--ink-950)]">
               {user.fullName || "TXG teammate"}
             </p>
-            <p className="truncate text-xs text-[var(--ink-500)]">{user.email}</p>
+            <p className="truncate text-[11px] text-[var(--ink-500)]">{user.email}</p>
           </div>
         </div>
-        <div className="mt-3">
+        <div className="mt-2">
           <SignOutButton />
         </div>
       </div>
