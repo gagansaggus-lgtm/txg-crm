@@ -91,8 +91,8 @@ export async function POST(req: Request) {
     apiKey,
     baseURL: "https://openrouter.ai/api/v1",
     defaultHeaders: {
-      "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL ?? "https://txg-crm.vercel.app",
-      "X-Title": "TXG CRM",
+      "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL ?? "https://vector.transwayxpress.com",
+      "X-Title": "TXG Vector",
     },
   });
 

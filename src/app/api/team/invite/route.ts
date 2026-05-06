@@ -61,9 +61,9 @@ export async function POST(req: Request) {
       const { Resend } = await import("resend");
       const resend = new Resend(resendKey);
       await resend.emails.send({
-        from: process.env.RESEND_FROM ?? "TXG CRM <invites@transwayxpress.com>",
+        from: process.env.RESEND_FROM ?? "TXG Vector <invites@transwayxpress.com>",
         to: email,
-        subject: "You've been invited to TXG CRM",
+        subject: "You've been invited to TXG Vector",
         html: `
           <div style="font-family:Manrope,system-ui,sans-serif;max-width:480px;padding:24px;color:#0c0c0c">
             <p style="color:#f75928;font-weight:700;letter-spacing:.24em;text-transform:uppercase;font-size:11px;margin:0">Transway Xpress Global</p>

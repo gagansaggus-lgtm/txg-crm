@@ -26,9 +26,9 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "TXG CRM — Transway Xpress Global",
+  title: "TXG Vector — Transway Xpress Global",
   description:
-    "ePowering fulfillment globally. CRM + ops for warehousing, fulfillment, last-mile, and international courier.",
+    "ePowering fulfillment globally. Operations platform for warehousing, fulfillment, last-mile, and international courier.",
 };
 
 export default function RootLayout({
