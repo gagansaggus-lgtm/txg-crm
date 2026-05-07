@@ -7,7 +7,9 @@ import { LeadStatusUpdater } from "@/components/marketing/lead-status-updater";
 import { LeadEditForm } from "@/components/marketing/lead-edit-form";
 import { LeadContactList } from "@/components/marketing/lead-contact-list";
 import { LeadOutreachTimeline } from "@/components/marketing/lead-outreach-timeline";
+import { AssignSequenceButton } from "@/components/marketing/assign-sequence-button";
 import { getLeadDetail } from "@/lib/supabase/queries/leads";
+import { listSequences } from "@/lib/supabase/queries/outreach";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { loadWorkspaceContext } from "@/lib/supabase/workspace";
 import { cn, formatDateTime } from "@/lib/utils";
@@ -47,7 +49,10 @@ export default async function LeadDetailPage({
   if (!ctx) return null;
 
   const supabase = await createSupabaseServerClient();
-  const detail = await getLeadDetail(supabase, ctx.workspaceId, leadId);
+  const [detail, sequences] = await Promise.all([
+    getLeadDetail(supabase, ctx.workspaceId, leadId),
+    listSequences(supabase, ctx.workspaceId),
+  ]);
   if (!detail) notFound();
 
   const { lead, contacts, messages, icp_profile, assignment } = detail;
@@ -81,7 +86,10 @@ export default async function LeadDetailPage({
             </a>
           ) : null}
         </div>
-        <LeadStatusUpdater leadId={lead.id} currentStatus={lead.status} />
+        <div className="flex items-start gap-3">
+          <AssignSequenceButton leadId={lead.id} sequences={sequences} />
+          <LeadStatusUpdater leadId={lead.id} currentStatus={lead.status} />
+        </div>
       </div>
 
       <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
