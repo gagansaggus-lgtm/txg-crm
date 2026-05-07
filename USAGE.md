@@ -182,9 +182,9 @@ For the full pipeline kanban: **Pipeline** in the sidebar (existing module — l
 - AI chat widget (rewired to Claude Code job queue)
 
 ### 🟡 Wired but needs activation (next plans)
-- Resend email sending (Plan 6) — currently you copy/paste. Once wired, "Mark sent" will actually send via Resend.
-- Ayrshare social posting (Plan 6) — for company-page posts
-- WhatsApp Business API (Plan 6) — for compliant broadcast
+- Zoho ZeptoMail email sending (Plan 6) — currently you copy/paste. Once wired, "Mark sent" actually sends via ZeptoMail.
+- Zoho Social posting (Plan 6) — for company-page posts. Day 1: copy from TXG Vector → paste into Zoho Social UI. Phase 1: API integration for one-click publish.
+- WhatsApp Business API (Plan 6) — for compliant broadcast (only if/when conversation volume justifies)
 - Free public tools (calculator, ROI, quiz) — Plan 5
 - SEO content engine + atomization — Plan 4
 - Founder Brand OS (LinkedIn post drafts daily) — Plan 4

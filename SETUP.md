@@ -47,8 +47,16 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
 SUPABASE_SERVICE_ROLE_KEY=eyJ...
 WMS_IMPORT_SECRET=any-random-string
 
-# Optional — for Resend integration when email sending is wired up
-RESEND_API_KEY=
+# Optional — Zoho ZeptoMail (transactional + bulk email)
+# Wired in when we build Plan 6 (Distribution).
+ZEPTOMAIL_API_KEY=
+ZEPTOMAIL_FROM_EMAIL=hello@mail.transwayxpress.com
+
+# Optional — Zoho Social API credentials
+# Only needed if we build full automation (Option B). Day 1 uses manual paste workflow.
+ZOHO_SOCIAL_CLIENT_ID=
+ZOHO_SOCIAL_CLIENT_SECRET=
+ZOHO_SOCIAL_REFRESH_TOKEN=
 
 # App URL (used for callbacks, emails)
 NEXT_PUBLIC_APP_URL=http://localhost:3000
