@@ -112,7 +112,7 @@
   /* Hero */
   .hero { margin-bottom: 48px; }
   .hero .eyebrow { margin-bottom: 18px; }
-  .hero h1 { font-size: 64px; margin-bottom: 24px; }
+  .hero h1 { font-size: 60px; margin-bottom: 24px; }
   .hero .lede { max-width: 720px; }
 
   /* Quote callout */
@@ -172,12 +172,6 @@
     padding: 36px 32px;
     margin: 28px 0;
   }
-  .arch-row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0;
-    position: relative;
-  }
   .arch-tier {
     background: var(--paper);
     border: 2px solid var(--line);
@@ -220,12 +214,148 @@
     align-items: center;
     justify-content: center;
     color: var(--ink-400);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 800;
     margin: 4px 0;
     letter-spacing: 0.2em;
   }
-  .arch-arrow .line { width: 2px; height: 20px; background: var(--ink-400); margin: 0 8px; }
+
+  /* Service Menu */
+  .services {
+    margin: 28px 0;
+  }
+  .service-primary {
+    background: var(--ink-950);
+    color: white;
+    border-radius: 16px;
+    padding: 32px 36px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-primary::before {
+    content: "PRIMARY FOCUS";
+    position: absolute;
+    top: 22px;
+    right: 28px;
+    background: var(--accent);
+    color: white;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    padding: 6px 12px;
+    border-radius: 20px;
+  }
+  .service-primary .service-icon {
+    width: 60px; height: 60px;
+    background: var(--accent);
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    color: white;
+    font-family: "Nunito Sans";
+    font-weight: 900;
+    font-size: 28px;
+    margin-bottom: 18px;
+  }
+  .service-primary h3 {
+    font-family: "Manrope";
+    font-weight: 800;
+    font-size: 26px;
+    letter-spacing: -0.02em;
+    color: white;
+    margin-bottom: 10px;
+  }
+  .service-primary p {
+    font-size: 15px;
+    color: var(--ink-400);
+    line-height: 1.55;
+    max-width: 640px;
+  }
+  .service-secondary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .service-card {
+    border: 1px solid var(--line);
+    background: var(--paper);
+    border-radius: 12px;
+    padding: 18px 20px;
+    position: relative;
+  }
+  .service-card .service-tag {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .service-card h4 {
+    font-family: "Manrope";
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+    color: var(--ink-950);
+  }
+  .service-card p { font-size: 12px; color: var(--ink-700); line-height: 1.5; }
+
+  /* Markets */
+  .markets {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .market {
+    border-radius: 14px;
+    padding: 24px 26px;
+    border: 1px solid var(--line);
+  }
+  .market-primary {
+    background: linear-gradient(135deg, var(--accent-100) 0%, var(--paper) 100%);
+    border-color: rgba(247,89,40,0.3);
+  }
+  .market-secondary {
+    background: var(--paper);
+  }
+  .market .market-tag {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .market-secondary .market-tag { color: var(--ink-500); }
+  .market h4 {
+    font-family: "Manrope";
+    font-weight: 800;
+    font-size: 18px;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .market p { font-size: 13px; color: var(--ink-700); line-height: 1.5; margin-bottom: 12px; }
+  .market-bullets {
+    list-style: none;
+    margin-top: 10px;
+  }
+  .market-bullets li {
+    font-size: 12px;
+    color: var(--ink-700);
+    padding: 4px 0 4px 16px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .market-bullets li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 900;
+  }
 
   /* Lead funnel */
   .funnel {
@@ -237,7 +367,7 @@
   }
   .funnel-stage {
     display: grid;
-    grid-template-columns: 100px 1fr 220px;
+    grid-template-columns: 110px 1fr 240px;
     align-items: center;
     gap: 16px;
     margin-bottom: 8px;
@@ -245,7 +375,7 @@
   .funnel-num {
     font-family: "Nunito Sans";
     font-weight: 900;
-    font-size: 28px;
+    font-size: 26px;
     color: var(--ink-950);
     letter-spacing: -0.02em;
     text-align: right;
@@ -261,7 +391,6 @@
     font-family: "Manrope";
     font-weight: 700;
     font-size: 13px;
-    transition: width 0.3s;
   }
   .funnel-stage:nth-child(1) .funnel-bar { width: 100%; }
   .funnel-stage:nth-child(2) .funnel-bar { width: 78%; }
@@ -355,7 +484,6 @@
     border-radius: 12px;
     padding: 20px 22px;
     background: var(--paper);
-    position: relative;
   }
   .layer-num {
     font-family: "Nunito Sans";
@@ -378,7 +506,7 @@
     border-top: 1px solid var(--line);
   }
 
-  /* Roles cards (no names) */
+  /* Roles cards */
   .roles {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -553,56 +681,59 @@
     <div class="doc-meta">
       <strong>Strategy · Internal</strong>
       Document · 7 May 2026<br>
-      Marketing & Sales Platform
+      Marketing &amp; Sales Platform
     </div>
   </div>
 
   <div class="hero">
     <p class="eyebrow">Marketing &amp; Sales Operating System</p>
-    <h1 class="display">Out-publish, out-research,<br>out-personalize.</h1>
+    <h1 class="display">Fulfillment for North America.</h1>
     <p class="lede">
       TXG Vector becomes the operating system for our entire marketing and sales engine.
-      Strategy, content, outbound, social, partnerships, PR, sales enablement, analytics —
-      one platform. Powered by Claude as the AI engine on our existing Max plan. Zero
-      external AI vendor cost. Zero marketing agency fees.
+      Our market is North American e-commerce — brands in Canada and the United States
+      that need fulfillment they can rely on. When the opportunity calls for warehousing
+      only, Amazon FBA prep, last-mile, returns, or a cross-border lane — we are ready.
+      One platform, one team, one engine. Powered by Claude on the existing Max plan.
+      Zero external AI vendor cost.
     </p>
   </div>
 
   <div class="quote">
-    <p>"For ambitious Indian D2C brands building international demand, TXG is the asset-based 4PL that lets you launch in North America without operational overhead — combining 12 years of US and Canadian logistics infrastructure with cross-border bulk consolidation that cuts cost-per-order by half and delivery time by two-thirds."</p>
+    <p>"We are the asset-based fulfillment partner for North American e-commerce brands. Two facilities at the busiest US-Canada corridor. Twelve years of operating history. Flexible enough to start with warehousing alone — integrated enough to run your entire supply chain when you scale."</p>
     <div class="who">— Brand positioning, agreed 7 May 2026</div>
   </div>
 
   <div class="section">
-    <p class="eyebrow">The opportunity</p>
-    <h2>A category nobody else can match in 12 months.</h2>
+    <p class="eyebrow">Why we win</p>
+    <h2>An incumbent positioned for the next decade.</h2>
     <p class="section-intro">
-      Software-led aggregators don't own warehouses in North America. Enterprise carriers
-      don't run integrated 4PL services for Indian D2C brands. TXG sits in a category of one.
+      We are not a startup pretending to be a logistics company. Twelve years of trucking
+      and warehousing operations, two strategic facilities, deep US-Canada corridor expertise.
+      The marketing has to project that — not bury it.
     </p>
 
     <div class="grid-3">
       <div class="card card-tinted">
         <div class="num">12</div>
-        <h3>Years in NA logistics</h3>
-        <p class="small">Trusted operator since 2014. We are an incumbent expanding — not a startup pretending.</p>
+        <h3>Years operating</h3>
+        <p class="small">Transway Group since 2014. We are the trusted operator local brands have been waiting for.</p>
       </div>
       <div class="card card-tinted">
         <div class="num">80%</div>
         <h3>Pincode coverage</h3>
-        <p class="small">80–90% of Canadian + 70% of US pincodes. Asset-based, two-facility footprint.</p>
+        <p class="small">80–90% of Canada plus 70% of the United States. Two-facility footprint at the largest US-Canada crossing.</p>
       </div>
       <div class="card card-tinted">
-        <div class="num">50%</div>
-        <h3>Cost reduction</h3>
-        <p class="small">Bulk consolidation cuts cost-per-order in half. Delivery time from 20 days to 7–12.</p>
+        <div class="num">2</div>
+        <h3>Strategic facilities</h3>
+        <p class="small">Buffalo, NY and Etobicoke, ON. Same-day cross-border move. Native to both retail markets.</p>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <p class="eyebrow">Why this matters now</p>
-    <h2>Today vs. ninety days from today.</h2>
+    <p class="eyebrow">Today vs. ninety days from today</p>
+    <h2>The marketing transformation.</h2>
 
     <div class="grid-2" style="margin-top: 28px;">
       <div class="card">
@@ -610,8 +741,8 @@
         <ul class="compare-list" style="margin-top: 10px;">
           <li>WordPress site with lorem ipsum testimonials in production</li>
           <li>Single newsletter form as the only lead capture mechanism</li>
-          <li>Zero India market presence on any digital surface</li>
-          <li>No CRM-integrated outreach engine</li>
+          <li>No conversion architecture, no service-tier landing pages</li>
+          <li>No CRM-integrated outbound engine</li>
           <li>Generic AI graphics on social — no strategy, no compounding</li>
           <li>No content calendar, no SEO foundation, no thought leadership</li>
         </ul>
@@ -620,11 +751,11 @@
         <h3 style="color: var(--accent);">Ninety Days From Today</h3>
         <ul class="compare-list" style="margin-top: 10px;">
           <li>Conversion-architected marketing site live (Next.js, Vercel)</li>
-          <li>5,000 validated Indian D2C leads in active outreach</li>
-          <li>30+ SEO articles ranking · 1,500 LinkedIn followers</li>
-          <li>3 free tools live: shipping calculator, ROI, readiness quiz</li>
+          <li>5,000+ validated NA e-commerce leads in active outreach</li>
+          <li>30+ SEO articles ranking · 1,500+ LinkedIn followers</li>
+          <li>3 free tools live: shipping calculator, ROI, fulfillment readiness quiz</li>
           <li>4+ partnerships signed · 4+ published media mentions</li>
-          <li>10–20 closed Indian D2C clients with documented case studies</li>
+          <li>10–20 closed e-commerce clients with documented case studies</li>
         </ul>
       </div>
     </div>
@@ -649,7 +780,7 @@
       </div>
     </div>
     <div class="doc-meta">
-      <strong>System Architecture</strong>
+      <strong>Architecture · Operations</strong>
       Three layers · One operating system
     </div>
   </div>
@@ -659,15 +790,16 @@
     <h2>The platform stack — top to bottom.</h2>
     <p class="section-intro">
       The team works in TXG Vector. The AI engine is Claude Code, scheduled to run every
-      15 minutes via the existing Max plan. Supabase is the persistent state both layers
-      share. Delivery flows through inexpensive pipes — Resend, Ayrshare, WhatsApp Business API.
+      15 minutes via the existing Max plan — no API keys. Supabase is the persistent state
+      both layers share. Delivery flows through inexpensive pipes — Resend, Ayrshare,
+      WhatsApp Business API.
     </p>
 
     <div class="arch-flow">
       <div class="arch-tier arch-tier-team">
         <div class="arch-label">Layer 1 — Humans</div>
         <h4>The Team Works in TXG Vector</h4>
-        <p>Reviews drafts. Approves outreach. Sends approved messages manually for LinkedIn. Watches dashboards. Closes deals.</p>
+        <p>Reviews drafts. Approves outreach. Sends LinkedIn DMs manually. Watches dashboards. Closes deals.</p>
       </div>
 
       <div class="arch-arrow">↕  reads, writes, approves  ↕</div>
@@ -699,55 +831,55 @@
       <div class="arch-tier arch-tier-delivery">
         <div class="arch-label">Layer 5 — Delivery (not AI)</div>
         <h4>Resend · Ayrshare · WhatsApp Business</h4>
-        <p>Email delivery, social posting (LinkedIn, Instagram, YouTube, Twitter), WhatsApp broadcast — these are pipes, not AI. Sub-$200/month total.</p>
+        <p>Email, social posting (LinkedIn, Instagram, YouTube, Twitter), WhatsApp broadcast — these are pipes, not AI. Sub-$200/month total.</p>
       </div>
     </div>
   </div>
 
   <div class="section">
     <p class="eyebrow">The lead funnel</p>
-    <h2>From 100,000 raw to revenue.</h2>
+    <h2>From discovery to revenue.</h2>
     <p class="section-intro">
-      Mechanical filters drop 95% of leads in the first three stages — no AI cost. Claude
-      Code applies ICP scoring only on the cleaned subset. Final hand-off to SDRs is a
-      research-quality dataset, not noise.
+      Mechanical filters drop the noise in the first three stages — no AI cost. Claude
+      Code applies ICP scoring only on the cleaned subset. By the time the SDRs see a
+      lead, it's a research-quality match, not a guess.
     </p>
 
     <div class="funnel">
       <div class="funnel-stage">
-        <div class="funnel-num">100K</div>
-        <div class="funnel-bar">Raw StoreLeads import</div>
+        <div class="funnel-num">50K+</div>
+        <div class="funnel-bar">Lead universe</div>
         <div class="funnel-meta">
-          <strong>Stage 0 — Import</strong>
-          Indian e-commerce brands · all categories
+          <strong>Stage 0 — Discovery</strong>
+          NA Shopify stores · Amazon sellers · industry directories
         </div>
       </div>
       <div class="funnel-stage">
-        <div class="funnel-num">60K</div>
+        <div class="funnel-num">30K</div>
         <div class="funnel-bar">Auto-filter passed</div>
         <div class="funnel-meta">
           <strong>Stage 1 — Pre-filter</strong>
-          Valid website, valid email format, no duplicates
+          Valid website, valid contact format, no duplicates
         </div>
       </div>
       <div class="funnel-stage">
-        <div class="funnel-num">35K</div>
+        <div class="funnel-num">22K</div>
         <div class="funnel-bar">Live websites verified</div>
         <div class="funnel-meta">
           <strong>Stage 2 — Web verify</strong>
-          HTTP liveness check, response under 5s
+          HTTP liveness, response under 5 seconds
         </div>
       </div>
       <div class="funnel-stage">
-        <div class="funnel-num">20K</div>
+        <div class="funnel-num">15K</div>
         <div class="funnel-bar">Active business signals</div>
         <div class="funnel-meta">
           <strong>Stage 3 — Signal check</strong>
-          Active social, recent activity, real products
+          Real products, recent activity, active social presence
         </div>
       </div>
       <div class="funnel-stage">
-        <div class="funnel-num">8K</div>
+        <div class="funnel-num">6K</div>
         <div class="funnel-bar">ICP-scored A / B / C</div>
         <div class="funnel-meta">
           <strong>Stage 4 — Claude Code scores</strong>
@@ -759,7 +891,7 @@
         <div class="funnel-bar">Verified contactable leads</div>
         <div class="funnel-meta">
           <strong>Stage 5 — Contact verify</strong>
-          Founder email, LinkedIn URL, WhatsApp where possible
+          Decision-maker email, LinkedIn URL, phone where possible
         </div>
       </div>
       <div class="funnel-stage">
@@ -778,8 +910,8 @@
     <h2>How the platform produces revenue, every day.</h2>
     <p class="section-intro">
       Claude Code does the heavy lifting overnight. The team spends mornings reviewing and
-      approving. Days are for live conversations and outreach. Evenings, the agent processes
-      replies and sets up tomorrow.
+      approving. Days are for live conversations and closes. Evenings, the agent processes
+      replies and prepares tomorrow.
     </p>
 
     <div class="daily-flow">
@@ -788,7 +920,7 @@
         <h4>Claude Code Works</h4>
         <ul>
           <li>Validates new leads</li>
-          <li>Drafts SDR queues (40 each)</li>
+          <li>Drafts SDR queues</li>
           <li>Writes today's posts</li>
           <li>Generates SEO articles</li>
           <li>Scores ICP fit</li>
@@ -838,7 +970,7 @@
 
 <!-- ============== PAGE 3 ============== -->
 <section class="page">
-  <div class="page-num">Page 3 · Modules &amp; Roadmap</div>
+  <div class="page-num">Page 3 · Markets, Services, Roadmap</div>
 
   <div class="header">
     <div class="brand">
@@ -849,74 +981,86 @@
       </div>
     </div>
     <div class="doc-meta">
-      <strong>32 modules · 12 plans</strong>
-      90-day execution roadmap
+      <strong>Markets · Services · Plans</strong>
+      32 modules · 12 plans · 90-day targets
     </div>
   </div>
 
   <div>
-    <p class="eyebrow">The 9 layers</p>
-    <h2>Every marketing function — built once, runs forever.</h2>
+    <p class="eyebrow">What we sell</p>
+    <h2>One headline service. Six secondary capabilities.</h2>
     <p class="section-intro">
-      32 modules across 9 layers. Every layer activated from Day 1, deepened over 90 days.
-      Webinars deferred to Phase 1 (audience threshold). Existing-customer marketing
-      excluded by scope decision.
+      Marketing leads with fulfillment. Everything else is a capability we offer when
+      the opportunity arrives — never turning down good business, never diluting the
+      lead message either.
     </p>
 
-    <div class="layers">
-      <div class="layer">
-        <div class="layer-num">L1 · Foundation</div>
-        <h4>Strategy &amp; Brand</h4>
-        <p>Brand book, ICP &amp; persona workspace, competitive intelligence tracker.</p>
-        <div class="modules">3 modules</div>
+    <div class="services">
+      <div class="service-primary">
+        <div class="service-icon">▣</div>
+        <h3>E-Commerce Fulfillment for North America</h3>
+        <p>The entire order lifecycle handled — receive inventory, store, pick, pack, ship, manage returns. Native integrations with Shopify, WooCommerce, Magento, BigCommerce. Two facilities cover 80% of Canada and 70% of the US. This is the headline our marketing leads with.</p>
       </div>
-      <div class="layer">
-        <div class="layer-num">L2 · Capture</div>
-        <h4>Digital Presence</h4>
-        <p>Marketing site, free tools, lead magnet manager, reviews &amp; reputation.</p>
-        <div class="modules">4 modules</div>
+
+      <div class="service-secondary">
+        <div class="service-card">
+          <div class="service-tag">Secondary</div>
+          <h4>Warehousing Only</h4>
+          <p>Bulk storage, no fulfillment. Pallet-in, pallet-out. For brands that handle their own pick-pack.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-tag">Secondary</div>
+          <h4>Amazon FBA Prep</h4>
+          <p>Labeling, kitting, bundling, polybagging — all FBA-compliant — then shipped to Amazon fulfillment centers.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-tag">Secondary</div>
+          <h4>Last-Mile Delivery</h4>
+          <p>Local last-mile in NA where our fleet covers. Branded experience, faster delivery, full tracking.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-tag">Secondary</div>
+          <h4>Returns Management</h4>
+          <p>Reverse logistics: receive, inspect, restock, refurb, refund. Critical for international brands.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-tag">Secondary</div>
+          <h4>Cross-Border (India → NA)</h4>
+          <p>India D2C brands shipping to NA — direct courier, hybrid, or full local fulfillment models.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-tag">Secondary</div>
+          <h4>Custom 4PL</h4>
+          <p>Full supply-chain orchestration when a brand wants us to manage everything end-to-end.</p>
+        </div>
       </div>
-      <div class="layer">
-        <div class="layer-num">L3 · Production</div>
-        <h4>Content Engine</h4>
-        <p>Calendar, SEO articles, founder brand OS, newsletter, content atomizer.</p>
-        <div class="modules">5 modules</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="eyebrow">Who we sell to</p>
+    <h2>One primary market. Three opportunistic channels.</h2>
+
+    <div class="markets">
+      <div class="market market-primary">
+        <div class="market-tag">Primary Market</div>
+        <h4>North American E-Commerce Brands</h4>
+        <p>D2C brands in the US and Canada doing $500K–$50M in annual GMV who currently use a 3PL or are outgrowing self-fulfillment. Verticals: fashion, beauty, wellness, home, food, electronics.</p>
+        <ul class="market-bullets">
+          <li>SDR outbound + LinkedIn + cold email + content inbound</li>
+          <li>SEO targets: "fulfillment center Buffalo," "3PL Toronto," "Canadian fulfillment"</li>
+          <li>Lead universe: ~50K NA Shopify + WooCommerce stores in target verticals</li>
+        </ul>
       </div>
-      <div class="layer">
-        <div class="layer-num">L4 · Distribution</div>
-        <h4>Social &amp; Community</h4>
-        <p>Multi-platform posting, community manager, social listening.</p>
-        <div class="modules">3 modules</div>
-      </div>
-      <div class="layer">
-        <div class="layer-num">L5 · Revenue</div>
-        <h4>Outbound Engine</h4>
-        <p>Lead validation, research engine, SDR pipeline, ABM, sequence builder.</p>
-        <div class="modules">5 modules</div>
-      </div>
-      <div class="layer">
-        <div class="layer-num">L7 · Earned</div>
-        <h4>Partnerships &amp; PR</h4>
-        <p>Partner program, PR &amp; media pipeline, industry/influencer tracker.</p>
-        <div class="modules">3 modules</div>
-      </div>
-      <div class="layer">
-        <div class="layer-num">L8 · Presence</div>
-        <h4>Events &amp; Influencers</h4>
-        <p>Trade show calendar, influencer collaborations, webinars (Phase 1).</p>
-        <div class="modules">3 modules</div>
-      </div>
-      <div class="layer">
-        <div class="layer-num">L9 · Sales</div>
-        <h4>Sales Enablement</h4>
-        <p>Pitch asset library, battle cards, proposal generator.</p>
-        <div class="modules">3 modules</div>
-      </div>
-      <div class="layer">
-        <div class="layer-num">L10 · Intelligence</div>
-        <h4>Ops &amp; Analytics</h4>
-        <p>Attribution, role-based dashboards, marketing-sales SLA tracker.</p>
-        <div class="modules">3 modules</div>
+      <div class="market market-secondary">
+        <div class="market-tag">Opportunistic</div>
+        <h4>Adjacent Channels</h4>
+        <ul class="market-bullets" style="margin-top: 0;">
+          <li><strong style="color: var(--ink-950); font-weight: 700;">Amazon Sellers</strong> — FBA prep + warehousing</li>
+          <li><strong style="color: var(--ink-950); font-weight: 700;">Indian D2C</strong> — cross-border into NA</li>
+          <li><strong style="color: var(--ink-950); font-weight: 700;">Retail Brands</strong> — wholesale + DC distribution</li>
+          <li><strong style="color: var(--ink-950); font-weight: 700;">Inbound Referrals</strong> — partner-driven</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -929,22 +1073,22 @@
       <div class="role-card">
         <div class="role-icon">⌂</div>
         <h4>Owner</h4>
-        <p>Strategic dashboard, top-down pipeline visibility, executive sponsorship on Tier&nbsp;1 ABM accounts.</p>
+        <p>Strategic dashboard · pipeline visibility · executive sponsorship on Tier 1 accounts.</p>
       </div>
       <div class="role-card">
         <div class="role-icon">★</div>
         <h4>Public Face</h4>
-        <p>Founder Brand OS, LinkedIn 5×/week, PR pipeline, podcast appearances, partnership outreach.</p>
+        <p>Founder Brand OS · LinkedIn 5×/week · PR pipeline · podcasts · partnership outreach.</p>
       </div>
       <div class="role-card">
         <div class="role-icon">▲</div>
         <h4>Account Executive</h4>
-        <p>Qualified opportunities, proposals, contracts, close calls, win-loss interviews, customer references.</p>
+        <p>Qualified opportunities · proposals · contracts · close calls · reference customers.</p>
       </div>
       <div class="role-card">
         <div class="role-icon">●</div>
         <h4>SDR</h4>
-        <p>Daily 40-message queue across LinkedIn, email, WhatsApp. Reply tracking. Qualification calls.</p>
+        <p>Daily 40-message queue across LinkedIn, email, WhatsApp · qualification calls.</p>
       </div>
     </div>
   </div>
@@ -958,7 +1102,7 @@
         <div class="plan-num">1</div>
         <div class="plan-body">
           <h4>Foundation</h4>
-          <p>Schema, AI job queue, agent runtime, navigation IA.</p>
+          <p>Schema · AI job queue · agent runtime · navigation IA.</p>
           <div class="plan-status">✓ Shipped — Tagged foundation-complete</div>
         </div>
       </div>
@@ -966,63 +1110,63 @@
         <div class="plan-num">2</div>
         <div class="plan-body">
           <h4>Strategy &amp; Brand Layer</h4>
-          <p>Brand book, ICPs &amp; personas workspace, competitive intel.</p>
+          <p>Brand book · ICPs &amp; personas · competitive intelligence.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">3</div>
         <div class="plan-body">
           <h4>Lead Validation &amp; Outbound</h4>
-          <p>100K → 5K validated · multi-channel sequences · ABM.</p>
+          <p>NA + adjacent leads → validated · multi-channel sequences · ABM.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">4</div>
         <div class="plan-body">
           <h4>Content Production</h4>
-          <p>SEO articles, founder brand OS, newsletter, atomizer.</p>
+          <p>SEO articles · founder brand · newsletter · atomizer.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">5</div>
         <div class="plan-body">
           <h4>Free Tools &amp; Lead Magnets</h4>
-          <p>Shipping calculator, ROI, quiz, gated PDF library.</p>
+          <p>Shipping calculator · ROI · readiness quiz · gated PDFs.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">6</div>
         <div class="plan-body">
           <h4>Social Distribution</h4>
-          <p>Ayrshare integration, community, social listening.</p>
+          <p>Ayrshare integration · community manager · social listening.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">7</div>
         <div class="plan-body">
           <h4>Partnerships &amp; PR</h4>
-          <p>Partner program, PR pipeline, awards, analyst relations.</p>
+          <p>Partner program · PR pipeline · awards · analyst relations.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">8</div>
         <div class="plan-body">
           <h4>Events &amp; Influencers</h4>
-          <p>Trade show calendar, speaking pipeline, creator collabs.</p>
+          <p>Trade show calendar · speaking pipeline · creator collaborations.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">9</div>
         <div class="plan-body">
           <h4>Sales Enablement</h4>
-          <p>Pitch decks, battle cards, proposal generator.</p>
+          <p>Pitch decks · battle cards · proposal generator.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">10</div>
         <div class="plan-body">
           <h4>Marketing Ops &amp; Analytics</h4>
-          <p>Attribution, dashboards, SLA, weekly reports.</p>
+          <p>Attribution · dashboards · SLA · weekly reports.</p>
         </div>
       </div>
       <div class="plan">
@@ -1036,7 +1180,7 @@
         <div class="plan-num">12</div>
         <div class="plan-body">
           <h4>Marketing Website Rebuild</h4>
-          <p>WordPress → Next.js · India + NA · conversion-architected.</p>
+          <p>WordPress → Next.js · NA-first · conversion-architected.</p>
         </div>
       </div>
     </div>
@@ -1048,12 +1192,12 @@
 
     <div class="kpi-grid">
       <div class="kpi">
-        <div class="kpi-num">5,000</div>
-        <div class="kpi-label">Validated Indian D2C leads in active outreach</div>
+        <div class="kpi-num">5,000+</div>
+        <div class="kpi-label">Validated NA e-commerce leads in active outreach</div>
       </div>
       <div class="kpi">
         <div class="kpi-num">10–20</div>
-        <div class="kpi-label">Closed Indian D2C clients</div>
+        <div class="kpi-label">Closed fulfillment clients</div>
       </div>
       <div class="kpi">
         <div class="kpi-num">30+</div>
@@ -1064,8 +1208,8 @@
         <div class="kpi-label">Combined LinkedIn following</div>
       </div>
       <div class="kpi">
-        <div class="kpi-num">300+</div>
-        <div class="kpi-label">Founder community members on WhatsApp + Telegram</div>
+        <div class="kpi-num">3</div>
+        <div class="kpi-label">Free tools live: calculator, ROI, readiness quiz</div>
       </div>
       <div class="kpi">
         <div class="kpi-num">4+</div>
