@@ -53,6 +53,7 @@ export function AiWidget() {
     ]);
 
     try {
+      // Step 1: enqueue chat job
       const res = await fetch("/api/ai/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -62,77 +63,94 @@ export function AiWidget() {
           pageContext: { route: pathname },
         }),
       });
-      if (!res.ok || !res.body) {
+      if (!res.ok) {
         const j = await res.json().catch(() => ({}));
         throw new Error(j.error ?? `HTTP ${res.status}`);
       }
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buf = "";
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buf += decoder.decode(value, { stream: true });
-        const events = buf.split("\n\n");
-        buf = events.pop() ?? "";
-        for (const evt of events) {
-          const lines = evt.split("\n");
-          const eventLine = lines.find((l) => l.startsWith("event:"));
-          const dataLine = lines.find((l) => l.startsWith("data:"));
-          if (!eventLine || !dataLine) continue;
-          const eventName = eventLine.slice(6).trim();
-          const payload = JSON.parse(dataLine.slice(5).trim());
-          if (eventName === "conversation") {
-            setConversationId(payload.conversationId);
-          } else if (eventName === "model") {
+      const enqueueResult = (await res.json()) as {
+        conversationId: string;
+        jobId: string;
+        pollUrl: string;
+      };
+      setConversationId(enqueueResult.conversationId);
+
+      // Step 2: poll until job completes (max 120s)
+      const startedAt = Date.now();
+      const POLL_TIMEOUT_MS = 120_000;
+      const POLL_INTERVAL_MS = 1500;
+      let lastAssistantText = "";
+
+      while (Date.now() - startedAt < POLL_TIMEOUT_MS) {
+        await new Promise((r) => setTimeout(r, POLL_INTERVAL_MS));
+
+        const pollResp = await fetch(enqueueResult.pollUrl);
+        if (!pollResp.ok) continue;
+        const polled = (await pollResp.json()) as {
+          job: { id: string; status: string };
+          messages: Array<{
+            id: string;
+            role: string;
+            content: string | null;
+            metadata?: { model?: string } | null;
+          }>;
+        };
+
+        // Render the latest assistant message content as it grows
+        const lastMsg = polled.messages[polled.messages.length - 1];
+        if (lastMsg && lastMsg.role === "assistant" && lastMsg.content) {
+          if (lastMsg.content !== lastAssistantText) {
+            lastAssistantText = lastMsg.content;
             setMessages((m) =>
               m.map((msg) =>
                 msg.id === assistantId && msg.role === "assistant"
-                  ? { ...msg, model: payload.model }
+                  ? {
+                      ...msg,
+                      text: lastMsg.content!,
+                      model: lastMsg.metadata?.model ?? msg.model,
+                    }
                   : msg,
-              ),
-            );
-          } else if (eventName === "delta") {
-            setMessages((m) =>
-              m.map((msg) =>
-                msg.id === assistantId && msg.role === "assistant"
-                  ? { ...msg, text: msg.text + payload.text }
-                  : msg,
-              ),
-            );
-          } else if (eventName === "tool_use") {
-            const toolId = `tool-${payload.id}`;
-            setMessages((m) => [...m, { id: toolId, role: "tool", name: payload.name, status: "running" }]);
-          } else if (eventName === "tool_result") {
-            setMessages((m) =>
-              m.map((msg) =>
-                msg.role === "tool" && msg.id === `tool-${payload.id}`
-                  ? { ...msg, status: "done" as const, summary: summarize(payload.result) }
-                  : msg,
-              ),
-            );
-          } else if (eventName === "error") {
-            setMessages((m) =>
-              m.map((msg) =>
-                msg.id === assistantId && msg.role === "assistant"
-                  ? { ...msg, text: `⚠️ ${payload.message}`, streaming: false }
-                  : msg,
-              ),
-            );
-          } else if (eventName === "done") {
-            setMessages((m) =>
-              m.map((msg) =>
-                msg.id === assistantId && msg.role === "assistant" ? { ...msg, streaming: false } : msg,
               ),
             );
           }
         }
+
+        if (polled.job.status === "completed" || polled.job.status === "failed") {
+          setMessages((m) =>
+            m.map((msg) => {
+              if (msg.id !== assistantId || msg.role !== "assistant") return msg;
+              if (polled.job.status === "failed" && !lastAssistantText) {
+                return { ...msg, text: "⚠️ Job failed — check agent logs.", streaming: false };
+              }
+              return { ...msg, streaming: false };
+            }),
+          );
+          return;
+        }
       }
+
+      // Timeout
+      setMessages((m) =>
+        m.map((msg) =>
+          msg.id === assistantId && msg.role === "assistant"
+            ? {
+                ...msg,
+                text:
+                  msg.text ||
+                  "⏳ Job is still processing in the background. Refresh shortly to see the reply.",
+                streaming: false,
+              }
+            : msg,
+        ),
+      );
     } catch (err) {
       setMessages((m) =>
         m.map((msg) =>
           msg.id === assistantId && msg.role === "assistant"
-            ? { ...msg, text: `⚠️ ${err instanceof Error ? err.message : "request failed"}`, streaming: false }
+            ? {
+                ...msg,
+                text: `⚠️ ${err instanceof Error ? err.message : "request failed"}`,
+                streaming: false,
+              }
             : msg,
         ),
       );
@@ -179,7 +197,7 @@ export function AiWidget() {
                   </div>
                   <div>
                     <p className="brand-headline text-sm text-[var(--ink-950)]">TXG Assistant</p>
-                    <p className="text-[11px] text-[var(--ink-500)]">⌘K to toggle · via OpenRouter</p>
+                    <p className="text-[11px] text-[var(--ink-500)]">⌘K to toggle</p>
                   </div>
                 </div>
                 <button
