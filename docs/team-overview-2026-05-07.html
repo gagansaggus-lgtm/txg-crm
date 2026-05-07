@@ -6,374 +6,532 @@
 <title>TXG Vector — Marketing & Sales Platform · Strategic Overview</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Manrope:wght@600;700;800&family=Nunito+Sans:wght@800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800;900&family=Nunito+Sans:wght@800;900&display=swap" rel="stylesheet">
 <style>
   :root {
     --ink-950: #0d1e3d;
+    --ink-800: #1e3358;
     --ink-700: #52637a;
     --ink-500: #98a8be;
     --ink-400: #b8c4d4;
-    --line: #eaecf0;
+    --line: #e4e8ee;
     --line-strong: #d0d8e4;
     --bg: #f5f6f8;
     --paper: #ffffff;
     --accent: #f75928;
     --accent-700: #d14a1d;
     --accent-100: #fff5f0;
+    --accent-50: #fffaf7;
     --success: #059669;
+    --success-50: #f0fdf4;
     --warn: #92600a;
-    --shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+    --info: #1e40af;
+    --info-50: #eff6ff;
+    --shadow: 0 6px 32px rgba(13,30,61,0.08), 0 2px 6px rgba(13,30,61,0.04);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { background: var(--bg); color: var(--ink-950); }
   body {
     font-family: "DM Sans", system-ui, sans-serif;
-    line-height: 1.55;
-    font-size: 14px;
-    padding: 32px 16px;
+    line-height: 1.6;
+    font-size: 16px;
+    padding: 40px 16px;
     -webkit-font-smoothing: antialiased;
   }
-  .doc { max-width: 920px; margin: 0 auto; }
+  .doc { max-width: 1000px; margin: 0 auto; }
   .page {
     background: var(--paper);
     border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 56px 64px;
-    margin-bottom: 32px;
+    border-radius: 18px;
+    padding: 64px 72px;
+    margin-bottom: 36px;
     box-shadow: var(--shadow);
     position: relative;
   }
   .page-num {
     position: absolute;
-    top: 24px;
-    right: 32px;
+    top: 28px;
+    right: 36px;
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--ink-400);
-    letter-spacing: 0.18em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
   }
 
   /* Typography */
-  .display { font-family: "Nunito Sans", sans-serif; font-weight: 900; letter-spacing: -0.025em; line-height: 1; }
+  .display { font-family: "Nunito Sans", sans-serif; font-weight: 900; letter-spacing: -0.028em; line-height: 1; }
   .headline { font-family: "Manrope", sans-serif; font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; }
   .eyebrow {
     font-family: "Manrope", sans-serif;
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.22em;
-    font-size: 11px;
+    letter-spacing: 0.24em;
+    font-size: 12px;
     color: var(--accent);
   }
-  .lede { font-size: 17px; line-height: 1.55; color: var(--ink-700); }
-  .small { font-size: 12px; color: var(--ink-500); }
-  h2 { font-family: "Manrope", sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -0.02em; margin-bottom: 8px; }
-  h3 { font-family: "Manrope", sans-serif; font-weight: 700; font-size: 15px; letter-spacing: -0.01em; margin-bottom: 6px; }
-  p + p { margin-top: 12px; }
+  .lede { font-size: 19px; line-height: 1.55; color: var(--ink-700); font-weight: 400; }
+  h2 { font-family: "Manrope", sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -0.025em; margin-bottom: 12px; line-height: 1.15; }
+  h3 { font-family: "Manrope", sans-serif; font-weight: 700; font-size: 17px; letter-spacing: -0.01em; margin-bottom: 8px; }
 
   /* Header */
   .header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 32px;
-    margin-bottom: 36px;
+    border-bottom: 2px solid var(--ink-950);
+    padding-bottom: 28px;
+    margin-bottom: 44px;
   }
-  .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-  }
+  .brand { display: inline-flex; align-items: center; gap: 12px; }
   .logo-mark {
-    width: 36px; height: 36px;
+    width: 44px; height: 44px;
     background: var(--ink-950);
-    border-radius: 8px;
+    border-radius: 10px;
     display: grid;
     place-items: center;
     color: white;
     font-family: "Nunito Sans";
     font-weight: 900;
-    font-size: 16px;
+    font-size: 20px;
     position: relative;
   }
   .logo-mark::after {
     content: "";
     position: absolute;
-    bottom: 6px; right: 6px;
-    width: 6px; height: 6px;
+    bottom: 7px; right: 7px;
+    width: 8px; height: 8px;
     background: var(--accent);
     border-radius: 50%;
   }
-  .brand-text {
-    font-family: "Manrope";
-    font-weight: 800;
-    font-size: 14px;
-    letter-spacing: -0.01em;
-  }
-  .brand-text small { display: block; font-size: 10px; font-weight: 600; color: var(--ink-500); letter-spacing: 0.18em; text-transform: uppercase; margin-top: 2px; }
-  .doc-meta { text-align: right; font-size: 11px; color: var(--ink-500); letter-spacing: 0.06em; }
-  .doc-meta strong { display: block; color: var(--ink-950); font-weight: 700; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 4px; }
+  .brand-text { font-family: "Manrope"; font-weight: 800; font-size: 16px; letter-spacing: -0.01em; }
+  .brand-text small { display: block; font-size: 10px; font-weight: 700; color: var(--ink-500); letter-spacing: 0.22em; text-transform: uppercase; margin-top: 3px; }
+  .doc-meta { text-align: right; font-size: 12px; color: var(--ink-500); }
+  .doc-meta strong { display: block; color: var(--ink-950); font-weight: 800; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 5px; }
 
   /* Hero */
-  .hero { margin-bottom: 44px; }
-  .hero .eyebrow { margin-bottom: 14px; }
-  .hero h1 { font-size: 52px; margin-bottom: 18px; }
-  .hero .lede { max-width: 640px; }
+  .hero { margin-bottom: 48px; }
+  .hero .eyebrow { margin-bottom: 18px; }
+  .hero h1 { font-size: 64px; margin-bottom: 24px; }
+  .hero .lede { max-width: 720px; }
 
   /* Quote callout */
   .quote {
-    border-left: 4px solid var(--accent);
+    border-left: 5px solid var(--accent);
     background: var(--accent-100);
-    padding: 24px 28px;
-    border-radius: 0 12px 12px 0;
-    margin: 32px 0;
+    padding: 28px 32px;
+    border-radius: 0 14px 14px 0;
+    margin: 36px 0;
   }
   .quote p {
     font-family: "Manrope";
     font-weight: 700;
-    font-size: 19px;
+    font-size: 22px;
     line-height: 1.4;
     color: var(--ink-950);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
   }
-  .quote .who { margin-top: 12px; font-size: 12px; color: var(--accent-700); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .quote .who { margin-top: 16px; font-size: 12px; color: var(--accent-700); font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; }
 
-  /* Three-column blocks */
-  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 28px 0; }
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  /* Cards & grids */
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin: 32px 0; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 28px 0; }
   .card {
     border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 20px 22px;
+    border-radius: 14px;
+    padding: 24px 26px;
     background: var(--paper);
   }
-  .card-tinted { background: var(--accent-100); border-color: rgba(247,89,40,0.18); }
+  .card-tinted { background: var(--accent-100); border-color: rgba(247,89,40,0.22); }
   .card-dark { background: var(--ink-950); color: white; border-color: var(--ink-950); }
-  .card-dark h3, .card-dark .small { color: white; }
+  .card-dark h3, .card-dark .small, .card-dark p { color: white; }
   .card .num {
     font-family: "Nunito Sans";
     font-weight: 900;
-    font-size: 36px;
+    font-size: 48px;
     color: var(--accent);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
     line-height: 1;
+    margin-bottom: 12px;
+  }
+  .small { font-size: 14px; color: var(--ink-500); line-height: 1.5; }
+
+  /* Section */
+  .section { margin-top: 56px; padding-top: 44px; border-top: 1px solid var(--line); }
+  .section:first-of-type { border-top: 0; padding-top: 0; }
+  .section .eyebrow { margin-bottom: 14px; }
+  .section-intro { color: var(--ink-700); margin-bottom: 32px; max-width: 720px; font-size: 17px; line-height: 1.55; }
+
+  /* ============== FLOW CHARTS ============== */
+
+  /* 3-Layer Architecture Flow */
+  .arch-flow {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 36px 32px;
+    margin: 28px 0;
+  }
+  .arch-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    position: relative;
+  }
+  .arch-tier {
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: 14px;
+    padding: 20px 24px;
+    position: relative;
+    z-index: 2;
+  }
+  .arch-tier-team { border-color: var(--ink-700); }
+  .arch-tier-vector { border-color: var(--ink-950); background: linear-gradient(135deg, #ffffff 0%, #f5f6f8 100%); }
+  .arch-tier-supabase { border-color: var(--accent); background: var(--accent-100); }
+  .arch-tier-claude { background: var(--ink-950); color: white; border-color: var(--ink-950); }
+  .arch-tier-delivery { border-color: var(--success); background: var(--success-50); }
+  .arch-tier .arch-label {
+    font-family: "Manrope";
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-500);
+    margin-bottom: 6px;
+  }
+  .arch-tier-claude .arch-label { color: var(--accent); }
+  .arch-tier-supabase .arch-label { color: var(--accent-700); }
+  .arch-tier-delivery .arch-label { color: var(--success); }
+  .arch-tier h4 {
+    font-family: "Manrope";
+    font-weight: 800;
+    font-size: 19px;
+    letter-spacing: -0.015em;
+    margin-bottom: 8px;
+    color: var(--ink-950);
+  }
+  .arch-tier-claude h4 { color: white; }
+  .arch-tier p { font-size: 13px; color: var(--ink-700); line-height: 1.5; }
+  .arch-tier-claude p { color: var(--ink-400); }
+  .arch-arrow {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-400);
+    font-size: 14px;
+    font-weight: 800;
+    margin: 4px 0;
+    letter-spacing: 0.2em;
+  }
+  .arch-arrow .line { width: 2px; height: 20px; background: var(--ink-400); margin: 0 8px; }
+
+  /* Lead funnel */
+  .funnel {
+    margin: 28px 0;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 32px;
+  }
+  .funnel-stage {
+    display: grid;
+    grid-template-columns: 100px 1fr 220px;
+    align-items: center;
+    gap: 16px;
     margin-bottom: 8px;
   }
-  .card-dark .num { color: var(--accent); }
+  .funnel-num {
+    font-family: "Nunito Sans";
+    font-weight: 900;
+    font-size: 28px;
+    color: var(--ink-950);
+    letter-spacing: -0.02em;
+    text-align: right;
+  }
+  .funnel-bar {
+    background: linear-gradient(90deg, var(--ink-950) 0%, var(--accent) 100%);
+    height: 36px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    color: white;
+    font-family: "Manrope";
+    font-weight: 700;
+    font-size: 13px;
+    transition: width 0.3s;
+  }
+  .funnel-stage:nth-child(1) .funnel-bar { width: 100%; }
+  .funnel-stage:nth-child(2) .funnel-bar { width: 78%; }
+  .funnel-stage:nth-child(3) .funnel-bar { width: 58%; }
+  .funnel-stage:nth-child(4) .funnel-bar { width: 42%; }
+  .funnel-stage:nth-child(5) .funnel-bar { width: 28%; }
+  .funnel-stage:nth-child(6) .funnel-bar { width: 18%; }
+  .funnel-stage:nth-child(7) .funnel-bar { width: 9%; background: linear-gradient(90deg, var(--accent) 0%, var(--success) 100%); }
+  .funnel-meta { font-size: 12px; color: var(--ink-500); line-height: 1.4; }
+  .funnel-meta strong { color: var(--ink-950); font-weight: 700; display: block; font-size: 13px; }
 
-  /* Section break */
-  .section { margin-top: 44px; padding-top: 36px; border-top: 1px solid var(--line); }
-  .section:first-of-type { border-top: 0; padding-top: 0; }
-  .section .eyebrow { margin-bottom: 12px; }
-  .section-intro { color: var(--ink-700); margin-bottom: 24px; max-width: 640px; }
+  /* Daily flow */
+  .daily-flow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin: 28px 0;
+    position: relative;
+  }
+  .daily-step {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    padding: 22px 20px;
+    position: relative;
+  }
+  .daily-step:first-child { border-radius: 12px 0 0 12px; }
+  .daily-step:last-child { border-radius: 0 12px 12px 0; }
+  .daily-step:not(:first-child) { border-left: 0; }
+  .daily-step::after {
+    content: "→";
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--paper);
+    color: var(--accent);
+    font-weight: 900;
+    font-size: 18px;
+    width: 16px;
+    height: 16px;
+    display: grid;
+    place-items: center;
+    z-index: 2;
+  }
+  .daily-step:last-child::after { display: none; }
+  .daily-time {
+    font-family: "Nunito Sans";
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .daily-step h4 {
+    font-family: "Manrope";
+    font-weight: 800;
+    font-size: 15px;
+    margin-bottom: 8px;
+    color: var(--ink-950);
+  }
+  .daily-step ul { list-style: none; }
+  .daily-step li {
+    font-size: 12px;
+    color: var(--ink-700);
+    padding: 4px 0 4px 14px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .daily-step li::before {
+    content: "•";
+    position: absolute;
+    left: 2px;
+    color: var(--accent);
+    font-weight: 900;
+  }
+  .daily-step.machine { background: var(--ink-950); color: white; }
+  .daily-step.machine h4 { color: white; }
+  .daily-step.machine li { color: var(--ink-400); }
+  .daily-step.machine .daily-time { color: var(--accent); }
 
   /* Layers grid */
   .layers {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
-    margin-top: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 24px;
   }
   .layer {
     border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 14px;
+    border-radius: 12px;
+    padding: 20px 22px;
     background: var(--paper);
     position: relative;
   }
-  .layer .layer-num {
+  .layer-num {
     font-family: "Nunito Sans";
     font-weight: 900;
     font-size: 11px;
     color: var(--accent);
-    letter-spacing: 0.18em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
-  .layer h4 { font-family: "Manrope"; font-weight: 700; font-size: 13px; letter-spacing: -0.01em; margin-bottom: 6px; line-height: 1.2; }
-  .layer p { font-size: 11px; color: var(--ink-500); line-height: 1.4; }
-  .layer .modules { margin-top: 8px; font-size: 11px; color: var(--ink-700); font-weight: 600; }
+  .layer h4 { font-family: "Manrope"; font-weight: 800; font-size: 16px; letter-spacing: -0.01em; margin-bottom: 8px; line-height: 1.2; }
+  .layer p { font-size: 13px; color: var(--ink-700); line-height: 1.5; margin-bottom: 10px; }
+  .layer .modules {
+    font-size: 11px;
+    color: var(--ink-500);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+  }
 
-  /* Architecture diagram */
-  .arch {
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 28px;
-    background: linear-gradient(180deg, var(--bg) 0%, var(--paper) 100%);
-    margin: 24px 0;
-  }
-  .arch-row {
+  /* Roles cards (no names) */
+  .roles {
     display: grid;
-    grid-template-columns: 220px 40px 1fr;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 24px;
   }
-  .arch-row:last-child { margin-bottom: 0; }
-  .arch-label {
-    font-family: "Manrope";
-    font-weight: 700;
-    font-size: 13px;
-    color: var(--ink-950);
-    text-align: right;
-  }
-  .arch-arrow {
-    text-align: center;
-    color: var(--ink-400);
-    font-size: 18px;
-    font-weight: 700;
-  }
-  .arch-box {
+  .role-card {
     background: var(--paper);
     border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 12px 16px;
-    font-size: 12px;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
   }
-  .arch-box strong {
+  .role-icon {
+    width: 52px; height: 52px;
+    background: var(--accent-100);
+    border-radius: 12px;
+    margin: 0 auto 14px;
+    display: grid;
+    place-items: center;
+    font-family: "Nunito Sans";
+    font-weight: 900;
+    font-size: 22px;
+    color: var(--accent);
+  }
+  .role-card h4 {
     font-family: "Manrope";
-    font-weight: 700;
-    font-size: 13px;
-    color: var(--ink-950);
-    display: block;
-    margin-bottom: 4px;
+    font-weight: 800;
+    font-size: 15px;
+    margin-bottom: 8px;
   }
-  .arch-box .arch-meta { color: var(--ink-500); font-size: 11px; }
-  .arch-supabase { background: var(--accent-100); border-color: rgba(247,89,40,0.25); }
-  .arch-claude { background: var(--ink-950); color: white; border-color: var(--ink-950); }
-  .arch-claude strong { color: white; }
-  .arch-claude .arch-meta { color: var(--ink-400); }
-
-  /* Team table */
-  .team-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 16px;
-    font-size: 13px;
-  }
-  .team-table th, .team-table td {
-    text-align: left;
-    padding: 12px 14px;
-    border-bottom: 1px solid var(--line);
-    vertical-align: top;
-  }
-  .team-table thead th {
-    font-family: "Manrope";
-    font-weight: 700;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    color: var(--ink-500);
-    background: var(--bg);
-    border-bottom: 1px solid var(--line-strong);
-  }
-  .team-table tbody td:first-child { font-weight: 700; color: var(--ink-950); }
-  .team-table tbody tr:last-child td { border-bottom: 0; }
+  .role-card p { font-size: 12px; color: var(--ink-700); line-height: 1.5; }
 
   /* Roadmap */
   .plans-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    margin-top: 20px;
+    margin-top: 24px;
   }
   .plan {
     display: flex;
     gap: 14px;
-    padding: 14px 16px;
+    padding: 16px 18px;
     border: 1px solid var(--line);
     border-radius: 10px;
     background: var(--paper);
   }
-  .plan.done { background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); border-color: #bbf7d0; }
+  .plan.done { background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); border-color: #86efac; }
   .plan-num {
-    width: 32px; height: 32px;
+    width: 36px; height: 36px;
     display: grid; place-items: center;
     background: var(--ink-950);
     color: white;
     border-radius: 8px;
     font-family: "Nunito Sans";
     font-weight: 900;
-    font-size: 13px;
+    font-size: 14px;
     flex-shrink: 0;
   }
   .plan.done .plan-num { background: var(--success); }
   .plan-body { flex: 1; min-width: 0; }
   .plan h4 {
     font-family: "Manrope";
-    font-weight: 700;
-    font-size: 13px;
+    font-weight: 800;
+    font-size: 14px;
     letter-spacing: -0.01em;
-    margin-bottom: 3px;
-    color: var(--ink-950);
+    margin-bottom: 4px;
   }
-  .plan p { font-size: 11px; color: var(--ink-500); line-height: 1.4; margin: 0; }
-  .plan-status { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--success); margin-top: 4px; }
+  .plan p { font-size: 12px; color: var(--ink-700); line-height: 1.4; }
+  .plan-status {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--success);
+    margin-top: 6px;
+  }
 
   /* KPI grid */
   .kpi-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-top: 16px;
+    gap: 14px;
+    margin-top: 24px;
   }
   .kpi {
     border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 16px 14px;
+    border-radius: 12px;
+    padding: 22px 18px;
     background: var(--paper);
     text-align: center;
   }
   .kpi-num {
     font-family: "Nunito Sans";
     font-weight: 900;
-    font-size: 28px;
-    color: var(--ink-950);
-    letter-spacing: -0.02em;
+    font-size: 36px;
+    color: var(--accent);
+    letter-spacing: -0.025em;
     line-height: 1;
-    margin-bottom: 6px;
+    margin-bottom: 10px;
   }
-  .kpi-num .accent { color: var(--accent); }
-  .kpi-label { font-size: 11px; color: var(--ink-500); line-height: 1.3; }
+  .kpi-label {
+    font-size: 12px;
+    color: var(--ink-700);
+    line-height: 1.4;
+    font-weight: 600;
+  }
 
-  /* List */
-  .check-list { list-style: none; margin-top: 12px; }
-  .check-list li {
-    padding: 8px 0 8px 28px;
+  /* Comparison list */
+  .compare-list { list-style: none; }
+  .compare-list li {
+    padding: 12px 0 12px 32px;
     position: relative;
-    font-size: 13px;
+    font-size: 14px;
     color: var(--ink-700);
     border-bottom: 1px dashed var(--line);
+    line-height: 1.5;
   }
-  .check-list li:last-child { border-bottom: 0; }
-  .check-list li::before {
+  .compare-list li:last-child { border-bottom: 0; }
+  .compare-list li::before {
     content: "▸";
     position: absolute;
-    left: 6px;
-    top: 8px;
+    left: 8px;
+    top: 12px;
     color: var(--accent);
-    font-size: 12px;
+    font-size: 14px;
   }
-  .check-list li strong { color: var(--ink-950); font-weight: 600; }
+  .card-dark .compare-list li { color: var(--ink-400); border-bottom-color: rgba(255,255,255,0.1); }
+  .card-dark .compare-list li::before { color: var(--accent); }
 
   /* Footer */
   .footer {
     border-top: 1px solid var(--line);
-    padding-top: 24px;
-    margin-top: 36px;
+    padding-top: 28px;
+    margin-top: 44px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 11px;
     color: var(--ink-400);
-    letter-spacing: 0.06em;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
   }
 
+  /* Print */
   @media print {
-    body { background: white; padding: 0; }
-    .page { box-shadow: none; border: 0; border-radius: 0; margin-bottom: 0; padding: 40px 50px; page-break-after: always; }
+    body { background: white; padding: 0; font-size: 14px; }
+    .page { box-shadow: none; border: 0; border-radius: 0; margin-bottom: 0; padding: 36px 44px; page-break-after: always; }
     .page:last-child { page-break-after: auto; }
+    .hero h1 { font-size: 48px; }
+    h2 { font-size: 26px; }
   }
 </style>
 </head>
@@ -382,7 +540,7 @@
 
 <!-- ============== PAGE 1 ============== -->
 <section class="page">
-  <div class="page-num">Page 1 of 3</div>
+  <div class="page-num">Page 1 · The Vision</div>
 
   <div class="header">
     <div class="brand">
@@ -393,101 +551,94 @@
       </div>
     </div>
     <div class="doc-meta">
-      <strong>Internal · Strategy</strong>
+      <strong>Strategy · Internal</strong>
       Document · 7 May 2026<br>
-      Prepared for the TXG team
+      Marketing & Sales Platform
     </div>
   </div>
 
   <div class="hero">
-    <p class="eyebrow">Marketing &amp; Sales Platform</p>
+    <p class="eyebrow">Marketing &amp; Sales Operating System</p>
     <h1 class="display">Out-publish, out-research,<br>out-personalize.</h1>
     <p class="lede">
-      TXG Vector becomes the operating system for our marketing and sales engine —
-      a single platform where Gagan, Draz, Daniel, Angad, and Jatin run every
-      motion. Strategy, content, outbound, social, partnerships, PR, sales
-      enablement, and analytics — all powered by Claude as the AI engine and
-      Supabase as the source of truth. Zero external AI vendor cost.
+      TXG Vector becomes the operating system for our entire marketing and sales engine.
+      Strategy, content, outbound, social, partnerships, PR, sales enablement, analytics —
+      one platform. Powered by Claude as the AI engine on our existing Max plan. Zero
+      external AI vendor cost. Zero marketing agency fees.
     </p>
   </div>
 
   <div class="quote">
     <p>"For ambitious Indian D2C brands building international demand, TXG is the asset-based 4PL that lets you launch in North America without operational overhead — combining 12 years of US and Canadian logistics infrastructure with cross-border bulk consolidation that cuts cost-per-order by half and delivery time by two-thirds."</p>
-    <div class="who">— Positioning, agreed 7 May 2026</div>
+    <div class="who">— Brand positioning, agreed 7 May 2026</div>
   </div>
 
   <div class="section">
     <p class="eyebrow">The opportunity</p>
-    <h2>The category we own — and nobody else can match in 12 months.</h2>
+    <h2>A category nobody else can match in 12 months.</h2>
     <p class="section-intro">
-      Software-led aggregators like ShipGlobal, QuickShip, and Shypmax don't own warehouses
-      in North America. Enterprise carriers like DHL and FedEx don't run integrated 4PL
-      services for Indian D2C brands. TXG sits in a category of one.
+      Software-led aggregators don't own warehouses in North America. Enterprise carriers
+      don't run integrated 4PL services for Indian D2C brands. TXG sits in a category of one.
     </p>
 
     <div class="grid-3">
       <div class="card card-tinted">
         <div class="num">12</div>
-        <h3>Years of NA logistics</h3>
-        <p class="small">Transway Transport since 2014. We are an incumbent expanding into a new market — not a startup.</p>
+        <h3>Years in NA logistics</h3>
+        <p class="small">Trusted operator since 2014. We are an incumbent expanding — not a startup pretending.</p>
       </div>
       <div class="card card-tinted">
         <div class="num">80%</div>
-        <h3>Canadian pincode coverage</h3>
-        <p class="small">Plus 70% of US pincodes. Asset-based, two-facility footprint at the busiest US-Canada corridor.</p>
+        <h3>Pincode coverage</h3>
+        <p class="small">80–90% of Canadian + 70% of US pincodes. Asset-based, two-facility footprint.</p>
       </div>
       <div class="card card-tinted">
         <div class="num">50%</div>
         <h3>Cost reduction</h3>
-        <p class="small">Bulk consolidation methodology: ₹3,000/order down to ₹1,500. Delivery cut from 20 days to 7-12.</p>
+        <p class="small">Bulk consolidation cuts cost-per-order in half. Delivery time from 20 days to 7–12.</p>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <p class="eyebrow">The problem with current marketing</p>
-    <h2>Why a $0-budget rebuild beats a $100K agency engagement.</h2>
-    <p class="section-intro">
-      Today TXG looks like a 2023 startup posting AI graphics. With Claude as our AI
-      engine on the existing Max plan, we operate as a 4PL incumbent — without paying
-      for a single external AI vendor or marketing agency.
-    </p>
+    <p class="eyebrow">Why this matters now</p>
+    <h2>Today vs. ninety days from today.</h2>
 
-    <div class="grid-2">
+    <div class="grid-2" style="margin-top: 28px;">
       <div class="card">
-        <h3 style="color: var(--accent);">Today (current state)</h3>
-        <ul class="check-list" style="margin-top: 8px;">
+        <h3 style="color: var(--accent);">Today — Current State</h3>
+        <ul class="compare-list" style="margin-top: 10px;">
           <li>WordPress site with lorem ipsum testimonials in production</li>
-          <li>Single newsletter form as the only lead capture</li>
-          <li>Zero India market presence on the site</li>
+          <li>Single newsletter form as the only lead capture mechanism</li>
+          <li>Zero India market presence on any digital surface</li>
           <li>No CRM-integrated outreach engine</li>
-          <li>Generic AI-generated social graphics, no strategy</li>
-          <li>No content calendar, no SEO, no thought leadership</li>
+          <li>Generic AI graphics on social — no strategy, no compounding</li>
+          <li>No content calendar, no SEO foundation, no thought leadership</li>
         </ul>
       </div>
       <div class="card card-dark">
-        <h3 style="color: var(--accent);">Ninety days from now</h3>
-        <ul class="check-list" style="margin-top: 8px;">
-          <li>Conversion-architected marketing site live (Next.js)</li>
+        <h3 style="color: var(--accent);">Ninety Days From Today</h3>
+        <ul class="compare-list" style="margin-top: 10px;">
+          <li>Conversion-architected marketing site live (Next.js, Vercel)</li>
           <li>5,000 validated Indian D2C leads in active outreach</li>
           <li>30+ SEO articles ranking · 1,500 LinkedIn followers</li>
           <li>3 free tools live: shipping calculator, ROI, readiness quiz</li>
-          <li>4+ partnerships signed · 4+ media mentions</li>
-          <li>10–20 closed Indian D2C clients</li>
+          <li>4+ partnerships signed · 4+ published media mentions</li>
+          <li>10–20 closed Indian D2C clients with documented case studies</li>
         </ul>
       </div>
     </div>
   </div>
 
   <div class="footer">
-    <span>TXG Vector — Marketing &amp; Sales Platform</span>
-    <span>Strategic Overview · Page 1</span>
+    <span>TXG Vector · Strategic Overview</span>
+    <span>Page 1 of 3</span>
   </div>
 </section>
 
 <!-- ============== PAGE 2 ============== -->
 <section class="page">
-  <div class="page-num">Page 2 of 3</div>
+  <div class="page-num">Page 2 · How It Works</div>
 
   <div class="header">
     <div class="brand">
@@ -498,75 +649,237 @@
       </div>
     </div>
     <div class="doc-meta">
-      <strong>Architecture · Modules</strong>
-      32 modules · 9 layers
+      <strong>System Architecture</strong>
+      Three layers · One operating system
     </div>
   </div>
 
   <div>
-    <p class="eyebrow">How it runs</p>
-    <h2 class="headline" style="font-size: 28px;">Three layers. One operating system.</h2>
-    <p class="lede" style="margin-top: 8px;">
-      The team works in TXG Vector. Claude Code runs as a scheduled agent — generating content,
-      enriching leads, drafting outreach — authenticated through the existing Claude Max plan.
-      Supabase is the persistent state shared by both. Delivery happens through inexpensive
-      pipes (Resend for email, Ayrshare for social, WhatsApp Business API).
+    <p class="eyebrow">Architecture</p>
+    <h2>The platform stack — top to bottom.</h2>
+    <p class="section-intro">
+      The team works in TXG Vector. The AI engine is Claude Code, scheduled to run every
+      15 minutes via the existing Max plan. Supabase is the persistent state both layers
+      share. Delivery flows through inexpensive pipes — Resend, Ayrshare, WhatsApp Business API.
     </p>
 
-    <div class="arch">
-      <div class="arch-row">
-        <div class="arch-label">The Team Works In</div>
-        <div class="arch-arrow">↕</div>
-        <div class="arch-box">
-          <strong>TXG Vector (Next.js)</strong>
-          <div class="arch-meta">10-section workspace · Strategy · Content · Outreach · Social · Growth · Analytics</div>
+    <div class="arch-flow">
+      <div class="arch-tier arch-tier-team">
+        <div class="arch-label">Layer 1 — Humans</div>
+        <h4>The Team Works in TXG Vector</h4>
+        <p>Reviews drafts. Approves outreach. Sends approved messages manually for LinkedIn. Watches dashboards. Closes deals.</p>
+      </div>
+
+      <div class="arch-arrow">↕  reads, writes, approves  ↕</div>
+
+      <div class="arch-tier arch-tier-vector">
+        <div class="arch-label">Layer 2 — Application</div>
+        <h4>TXG Vector (Next.js)</h4>
+        <p>10-section workspace: Today · Pipeline · Content · Distribution · Outreach · Growth · Strategy · Operations · Analytics · Settings.</p>
+      </div>
+
+      <div class="arch-arrow">↕  queries, mutations, real-time subscriptions  ↕</div>
+
+      <div class="arch-tier arch-tier-supabase">
+        <div class="arch-label">Layer 3 — Source of Truth</div>
+        <h4>Supabase Postgres</h4>
+        <p>32 marketing tables: leads · sequences · messages · content_pieces · social_posts · ai_jobs · ai_job_results · KPI snapshots · attribution touches.</p>
+      </div>
+
+      <div class="arch-arrow">↕  reads pending jobs, writes results  ↕</div>
+
+      <div class="arch-tier arch-tier-claude">
+        <div class="arch-label">Layer 4 — AI Engine (no API keys)</div>
+        <h4>Claude Code Agent · Runs Every 15 Minutes</h4>
+        <p>Scheduled via Windows Task Scheduler · authenticated through Claude Max plan · processes the ai_jobs queue · validates leads, scores ICP fit, drafts outreach, generates content, scrapes competitors.</p>
+      </div>
+
+      <div class="arch-arrow">↓  approved by humans, sent via APIs  ↓</div>
+
+      <div class="arch-tier arch-tier-delivery">
+        <div class="arch-label">Layer 5 — Delivery (not AI)</div>
+        <h4>Resend · Ayrshare · WhatsApp Business</h4>
+        <p>Email delivery, social posting (LinkedIn, Instagram, YouTube, Twitter), WhatsApp broadcast — these are pipes, not AI. Sub-$200/month total.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="eyebrow">The lead funnel</p>
+    <h2>From 100,000 raw to revenue.</h2>
+    <p class="section-intro">
+      Mechanical filters drop 95% of leads in the first three stages — no AI cost. Claude
+      Code applies ICP scoring only on the cleaned subset. Final hand-off to SDRs is a
+      research-quality dataset, not noise.
+    </p>
+
+    <div class="funnel">
+      <div class="funnel-stage">
+        <div class="funnel-num">100K</div>
+        <div class="funnel-bar">Raw StoreLeads import</div>
+        <div class="funnel-meta">
+          <strong>Stage 0 — Import</strong>
+          Indian e-commerce brands · all categories
         </div>
       </div>
-      <div class="arch-row">
-        <div class="arch-label">Source of Truth</div>
-        <div class="arch-arrow">↕</div>
-        <div class="arch-box arch-supabase">
-          <strong>Supabase Postgres</strong>
-          <div class="arch-meta">leads · sequences · messages · content_pieces · social_posts · KPIs · ai_jobs</div>
+      <div class="funnel-stage">
+        <div class="funnel-num">60K</div>
+        <div class="funnel-bar">Auto-filter passed</div>
+        <div class="funnel-meta">
+          <strong>Stage 1 — Pre-filter</strong>
+          Valid website, valid email format, no duplicates
         </div>
       </div>
-      <div class="arch-row">
-        <div class="arch-label">AI Engine (no API keys)</div>
-        <div class="arch-arrow">↕</div>
-        <div class="arch-box arch-claude">
-          <strong>Claude Code Agent · Max Plan</strong>
-          <div class="arch-meta">Scheduled every 15 min · validates leads · generates content · scores fit · drafts outreach</div>
+      <div class="funnel-stage">
+        <div class="funnel-num">35K</div>
+        <div class="funnel-bar">Live websites verified</div>
+        <div class="funnel-meta">
+          <strong>Stage 2 — Web verify</strong>
+          HTTP liveness check, response under 5s
+        </div>
+      </div>
+      <div class="funnel-stage">
+        <div class="funnel-num">20K</div>
+        <div class="funnel-bar">Active business signals</div>
+        <div class="funnel-meta">
+          <strong>Stage 3 — Signal check</strong>
+          Active social, recent activity, real products
+        </div>
+      </div>
+      <div class="funnel-stage">
+        <div class="funnel-num">8K</div>
+        <div class="funnel-bar">ICP-scored A / B / C</div>
+        <div class="funnel-meta">
+          <strong>Stage 4 — Claude Code scores</strong>
+          Vertical, GMV, fit grade, founder identified
+        </div>
+      </div>
+      <div class="funnel-stage">
+        <div class="funnel-num">5K</div>
+        <div class="funnel-bar">Verified contactable leads</div>
+        <div class="funnel-meta">
+          <strong>Stage 5 — Contact verify</strong>
+          Founder email, LinkedIn URL, WhatsApp where possible
+        </div>
+      </div>
+      <div class="funnel-stage">
+        <div class="funnel-num">10–20</div>
+        <div class="funnel-bar">Closed clients in 90 days</div>
+        <div class="funnel-meta">
+          <strong>Stage 6 — Closed-Won</strong>
+          Through outreach + organic + tools + ABM
         </div>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <p class="eyebrow">The 9 Layers</p>
-    <h2 class="headline" style="font-size: 24px;">Every marketing function. One platform.</h2>
+    <p class="eyebrow">Daily workflow</p>
+    <h2>How the platform produces revenue, every day.</h2>
+    <p class="section-intro">
+      Claude Code does the heavy lifting overnight. The team spends mornings reviewing and
+      approving. Days are for live conversations and outreach. Evenings, the agent processes
+      replies and sets up tomorrow.
+    </p>
+
+    <div class="daily-flow">
+      <div class="daily-step machine">
+        <div class="daily-time">2 AM – 6 AM</div>
+        <h4>Claude Code Works</h4>
+        <ul>
+          <li>Validates new leads</li>
+          <li>Drafts SDR queues (40 each)</li>
+          <li>Writes today's posts</li>
+          <li>Generates SEO articles</li>
+          <li>Scores ICP fit</li>
+        </ul>
+      </div>
+      <div class="daily-step">
+        <div class="daily-time">9 AM – 11 AM</div>
+        <h4>Team Reviews</h4>
+        <ul>
+          <li>Approve outreach drafts</li>
+          <li>Approve social posts</li>
+          <li>Approve articles</li>
+          <li>Send LinkedIn DMs</li>
+          <li>Engage on suggested posts</li>
+        </ul>
+      </div>
+      <div class="daily-step">
+        <div class="daily-time">11 AM – 5 PM</div>
+        <h4>Live Selling</h4>
+        <ul>
+          <li>Discovery calls</li>
+          <li>Demo calls</li>
+          <li>Reply to inbound</li>
+          <li>Update pipeline</li>
+          <li>Close deals</li>
+        </ul>
+      </div>
+      <div class="daily-step machine">
+        <div class="daily-time">6 PM – Midnight</div>
+        <h4>Claude Code Closes</h4>
+        <ul>
+          <li>Process replies</li>
+          <li>Update KPIs</li>
+          <li>Refresh signals</li>
+          <li>Score new leads</li>
+          <li>Prep tomorrow's queue</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>TXG Vector · Strategic Overview</span>
+    <span>Page 2 of 3</span>
+  </div>
+</section>
+
+<!-- ============== PAGE 3 ============== -->
+<section class="page">
+  <div class="page-num">Page 3 · Modules &amp; Roadmap</div>
+
+  <div class="header">
+    <div class="brand">
+      <div class="logo-mark">T</div>
+      <div class="brand-text">
+        TXG Vector
+        <small>Transway Xpress Global</small>
+      </div>
+    </div>
+    <div class="doc-meta">
+      <strong>32 modules · 12 plans</strong>
+      90-day execution roadmap
+    </div>
+  </div>
+
+  <div>
+    <p class="eyebrow">The 9 layers</p>
+    <h2>Every marketing function — built once, runs forever.</h2>
     <p class="section-intro">
       32 modules across 9 layers. Every layer activated from Day 1, deepened over 90 days.
-      Webinars are excluded from Phase 0 (audience threshold not met). Existing-customer
-      marketing is excluded by scope decision.
+      Webinars deferred to Phase 1 (audience threshold). Existing-customer marketing
+      excluded by scope decision.
     </p>
 
     <div class="layers">
       <div class="layer">
         <div class="layer-num">L1 · Foundation</div>
         <h4>Strategy &amp; Brand</h4>
-        <p>Brand book, ICP &amp; persona workspace, competitive intelligence.</p>
+        <p>Brand book, ICP &amp; persona workspace, competitive intelligence tracker.</p>
         <div class="modules">3 modules</div>
       </div>
       <div class="layer">
         <div class="layer-num">L2 · Capture</div>
         <h4>Digital Presence</h4>
-        <p>Marketing site bridge, free tools, lead magnets, reviews.</p>
+        <p>Marketing site, free tools, lead magnet manager, reviews &amp; reputation.</p>
         <div class="modules">4 modules</div>
       </div>
       <div class="layer">
         <div class="layer-num">L3 · Production</div>
         <h4>Content Engine</h4>
-        <p>Calendar, SEO articles, founder brand OS, newsletter, atomizer.</p>
+        <p>Calendar, SEO articles, founder brand OS, newsletter, content atomizer.</p>
         <div class="modules">5 modules</div>
       </div>
       <div class="layer">
@@ -578,7 +891,7 @@
       <div class="layer">
         <div class="layer-num">L5 · Revenue</div>
         <h4>Outbound Engine</h4>
-        <p>Lead validation, research engine, SDR pipeline, ABM, sequences.</p>
+        <p>Lead validation, research engine, SDR pipeline, ABM, sequence builder.</p>
         <div class="modules">5 modules</div>
       </div>
       <div class="layer">
@@ -589,7 +902,7 @@
       </div>
       <div class="layer">
         <div class="layer-num">L8 · Presence</div>
-        <h4>Events &amp; Community</h4>
+        <h4>Events &amp; Influencers</h4>
         <p>Trade show calendar, influencer collaborations, webinars (Phase 1).</p>
         <div class="modules">3 modules</div>
       </div>
@@ -602,171 +915,128 @@
       <div class="layer">
         <div class="layer-num">L10 · Intelligence</div>
         <h4>Ops &amp; Analytics</h4>
-        <p>Attribution, role-based dashboards, marketing-sales SLA.</p>
+        <p>Attribution, role-based dashboards, marketing-sales SLA tracker.</p>
         <div class="modules">3 modules</div>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <p class="eyebrow">The team</p>
-    <h2 class="headline" style="font-size: 24px;">Who does what — with the platform.</h2>
+    <p class="eyebrow">Roles using the platform</p>
+    <h2>Functions, not headcount.</h2>
 
-    <table class="team-table">
-      <thead>
-        <tr>
-          <th style="width: 20%;">Person</th>
-          <th style="width: 25%;">Role</th>
-          <th>Platform usage</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Gagan</td>
-          <td>Owner</td>
-          <td>Strategic dashboard · top-down pipeline visibility · LinkedIn growing · executive sponsor on Tier 1 ABM accounts</td>
-        </tr>
-        <tr>
-          <td>Draz</td>
-          <td>Partner · Public face</td>
-          <td>Founder Brand OS (5 LinkedIn posts/week) · PR &amp; media pipeline · podcast booking · partnership outreach</td>
-        </tr>
-        <tr>
-          <td>Daniel</td>
-          <td>Account Executive</td>
-          <td>Qualified opportunities · proposal generator · contracts · close calls · win/loss analysis</td>
-        </tr>
-        <tr>
-          <td>Angad</td>
-          <td>Ops Lead + SDR (India)</td>
-          <td>Daily SDR queue (40 leads) · multi-channel sequences · reply tracking · operations oversight</td>
-        </tr>
-        <tr>
-          <td>Jatin</td>
-          <td>SDR (India)</td>
-          <td>Daily SDR queue (40 leads) · LinkedIn DM + email + WhatsApp outreach · qualification</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="footer">
-    <span>TXG Vector — Marketing &amp; Sales Platform</span>
-    <span>Strategic Overview · Page 2</span>
-  </div>
-</section>
-
-<!-- ============== PAGE 3 ============== -->
-<section class="page">
-  <div class="page-num">Page 3 of 3</div>
-
-  <div class="header">
-    <div class="brand">
-      <div class="logo-mark">T</div>
-      <div class="brand-text">
-        TXG Vector
-        <small>Transway Xpress Global</small>
+    <div class="roles">
+      <div class="role-card">
+        <div class="role-icon">⌂</div>
+        <h4>Owner</h4>
+        <p>Strategic dashboard, top-down pipeline visibility, executive sponsorship on Tier&nbsp;1 ABM accounts.</p>
+      </div>
+      <div class="role-card">
+        <div class="role-icon">★</div>
+        <h4>Public Face</h4>
+        <p>Founder Brand OS, LinkedIn 5×/week, PR pipeline, podcast appearances, partnership outreach.</p>
+      </div>
+      <div class="role-card">
+        <div class="role-icon">▲</div>
+        <h4>Account Executive</h4>
+        <p>Qualified opportunities, proposals, contracts, close calls, win-loss interviews, customer references.</p>
+      </div>
+      <div class="role-card">
+        <div class="role-icon">●</div>
+        <h4>SDR</h4>
+        <p>Daily 40-message queue across LinkedIn, email, WhatsApp. Reply tracking. Qualification calls.</p>
       </div>
     </div>
-    <div class="doc-meta">
-      <strong>Roadmap · Targets</strong>
-      12 plans · 90-day outcomes
-    </div>
   </div>
 
-  <div>
+  <div class="section">
     <p class="eyebrow">Implementation roadmap</p>
-    <h2 class="headline" style="font-size: 28px;">Twelve plans. One foundation already shipped.</h2>
-    <p class="lede" style="margin-top: 8px;">
-      The platform is built in 12 sequential plans. Plan 1 (Foundation) is complete — schema,
-      AI job queue, agent runtime, and UI shell are in place. Plans 2–12 build the actual
-      module functionality on top of that foundation.
-    </p>
+    <h2>Twelve plans. Foundation already shipped.</h2>
 
     <div class="plans-grid">
       <div class="plan done">
         <div class="plan-num">1</div>
         <div class="plan-body">
           <h4>Foundation</h4>
-          <p>Schema, AI job queue, agent runtime, navigation. Tagged <code>foundation-complete</code>.</p>
-          <div class="plan-status">✓ Complete</div>
+          <p>Schema, AI job queue, agent runtime, navigation IA.</p>
+          <div class="plan-status">✓ Shipped — Tagged foundation-complete</div>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">2</div>
         <div class="plan-body">
           <h4>Strategy &amp; Brand Layer</h4>
-          <p>Brand book, ICPs &amp; personas workspace, competitive intelligence.</p>
+          <p>Brand book, ICPs &amp; personas workspace, competitive intel.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">3</div>
         <div class="plan-body">
-          <h4>Lead Validation &amp; Outbound Engine</h4>
-          <p>100K StoreLeads → 5K validated · multi-channel sequences · ABM.</p>
+          <h4>Lead Validation &amp; Outbound</h4>
+          <p>100K → 5K validated · multi-channel sequences · ABM.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">4</div>
         <div class="plan-body">
-          <h4>Content Production Engine</h4>
-          <p>SEO articles, founder brand OS, newsletter, content atomizer.</p>
+          <h4>Content Production</h4>
+          <p>SEO articles, founder brand OS, newsletter, atomizer.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">5</div>
         <div class="plan-body">
           <h4>Free Tools &amp; Lead Magnets</h4>
-          <p>Shipping calculator, ROI calculator, readiness quiz, gated PDFs.</p>
+          <p>Shipping calculator, ROI, quiz, gated PDF library.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">6</div>
         <div class="plan-body">
           <h4>Social Distribution</h4>
-          <p>Ayrshare integration, community manager, social listening.</p>
+          <p>Ayrshare integration, community, social listening.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">7</div>
         <div class="plan-body">
           <h4>Partnerships &amp; PR</h4>
-          <p>Partner program, PR pipeline, journalist database, awards.</p>
+          <p>Partner program, PR pipeline, awards, analyst relations.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">8</div>
         <div class="plan-body">
           <h4>Events &amp; Influencers</h4>
-          <p>Trade show calendar, speaking pipeline, creator collaborations.</p>
+          <p>Trade show calendar, speaking pipeline, creator collabs.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">9</div>
         <div class="plan-body">
           <h4>Sales Enablement</h4>
-          <p>Pitch decks, battle cards, proposal generator, ROI tools.</p>
+          <p>Pitch decks, battle cards, proposal generator.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">10</div>
         <div class="plan-body">
           <h4>Marketing Ops &amp; Analytics</h4>
-          <p>Attribution, dashboards, weekly reports, marketing-sales SLA.</p>
+          <p>Attribution, dashboards, SLA, weekly reports.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">11</div>
         <div class="plan-body">
           <h4>TXG Vector UI/UX Redesign</h4>
-          <p>Full visual redesign of the internal platform — density, clarity, speed.</p>
+          <p>Full visual rebuild — density, clarity, speed.</p>
         </div>
       </div>
       <div class="plan">
         <div class="plan-num">12</div>
         <div class="plan-body">
           <h4>Marketing Website Rebuild</h4>
-          <p>WordPress → Next.js. Dual-market (India + NA). Conversion-architected.</p>
+          <p>WordPress → Next.js · India + NA · conversion-architected.</p>
         </div>
       </div>
     </div>
@@ -774,67 +1044,47 @@
 
   <div class="section">
     <p class="eyebrow">90-day targets</p>
-    <h2 class="headline" style="font-size: 24px;">What we ship by August.</h2>
+    <h2>What we ship by August.</h2>
 
     <div class="kpi-grid">
       <div class="kpi">
-        <div class="kpi-num"><span class="accent">5,000</span></div>
+        <div class="kpi-num">5,000</div>
         <div class="kpi-label">Validated Indian D2C leads in active outreach</div>
       </div>
       <div class="kpi">
-        <div class="kpi-num"><span class="accent">10–20</span></div>
+        <div class="kpi-num">10–20</div>
         <div class="kpi-label">Closed Indian D2C clients</div>
       </div>
       <div class="kpi">
-        <div class="kpi-num"><span class="accent">30+</span></div>
+        <div class="kpi-num">30+</div>
         <div class="kpi-label">SEO articles published &amp; ranking</div>
       </div>
       <div class="kpi">
-        <div class="kpi-num"><span class="accent">1,500+</span></div>
-        <div class="kpi-label">Combined LinkedIn following (Draz + Gagan)</div>
+        <div class="kpi-num">1,500+</div>
+        <div class="kpi-label">Combined LinkedIn following</div>
       </div>
       <div class="kpi">
-        <div class="kpi-num"><span class="accent">300+</span></div>
-        <div class="kpi-label">Founder community members (WhatsApp + Telegram)</div>
+        <div class="kpi-num">300+</div>
+        <div class="kpi-label">Founder community members on WhatsApp + Telegram</div>
       </div>
       <div class="kpi">
-        <div class="kpi-num"><span class="accent">4+</span></div>
-        <div class="kpi-label">Partnership agreements signed</div>
+        <div class="kpi-num">4+</div>
+        <div class="kpi-label">Strategic partnership agreements signed</div>
       </div>
       <div class="kpi">
-        <div class="kpi-num"><span class="accent">4+</span></div>
+        <div class="kpi-num">4+</div>
         <div class="kpi-label">Published media mentions</div>
       </div>
       <div class="kpi">
-        <div class="kpi-num"><span class="accent">$0</span></div>
+        <div class="kpi-num">$0</div>
         <div class="kpi-label">Spent on external AI vendors or agencies</div>
       </div>
     </div>
   </div>
 
-  <div class="section">
-    <p class="eyebrow">Immediate next steps</p>
-    <h2 class="headline" style="font-size: 22px;">What happens this week.</h2>
-
-    <div class="grid-3">
-      <div class="card">
-        <h3>Apply migrations</h3>
-        <p class="small">Foundation database (11 migrations, 0010–0020) deployed to live Supabase. Adds all 32 module tables, helpers, and seed data.</p>
-      </div>
-      <div class="card">
-        <h3>Activate agent</h3>
-        <p class="small">Windows Task Scheduler runs the Claude Code agent every 15 minutes via the Max plan. Lead validation begins on the StoreLeads import.</p>
-      </div>
-      <div class="card">
-        <h3>Start Plan 2</h3>
-        <p class="small">Strategy &amp; Brand Layer build begins. Plans 3 and 4 (Outbound + Content) follow in parallel — first revenue motion live in week 2.</p>
-      </div>
-    </div>
-  </div>
-
   <div class="footer">
-    <span>TXG Vector — Marketing &amp; Sales Platform</span>
-    <span>Strategic Overview · Page 3 · End</span>
+    <span>TXG Vector · Strategic Overview</span>
+    <span>Page 3 of 3 · End</span>
   </div>
 </section>
 
