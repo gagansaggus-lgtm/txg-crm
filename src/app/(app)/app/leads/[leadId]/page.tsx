@@ -8,6 +8,7 @@ import { LeadEditForm } from "@/components/marketing/lead-edit-form";
 import { LeadContactList } from "@/components/marketing/lead-contact-list";
 import { LeadOutreachTimeline } from "@/components/marketing/lead-outreach-timeline";
 import { AssignSequenceButton } from "@/components/marketing/assign-sequence-button";
+import { PromoteToAbmButton } from "@/components/marketing/promote-to-abm-button";
 import { getLeadDetail } from "@/lib/supabase/queries/leads";
 import { listSequences } from "@/lib/supabase/queries/outreach";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -49,11 +50,18 @@ export default async function LeadDetailPage({
   if (!ctx) return null;
 
   const supabase = await createSupabaseServerClient();
-  const [detail, sequences] = await Promise.all([
+  const [detail, sequences, abmRow] = await Promise.all([
     getLeadDetail(supabase, ctx.workspaceId, leadId),
     listSequences(supabase, ctx.workspaceId),
+    supabase
+      .from("abm_accounts")
+      .select("id")
+      .eq("workspace_id", ctx.workspaceId)
+      .eq("lead_id", leadId)
+      .maybeSingle(),
   ]);
   if (!detail) notFound();
+  const isAbm = !!abmRow.data;
 
   const { lead, contacts, messages, icp_profile, assignment } = detail;
   const displayName = lead.display_name ?? lead.legal_name ?? "(no name)";
@@ -87,6 +95,7 @@ export default async function LeadDetailPage({
           ) : null}
         </div>
         <div className="flex items-start gap-3">
+          <PromoteToAbmButton leadId={lead.id} alreadyPromoted={isAbm} />
           <AssignSequenceButton leadId={lead.id} sequences={sequences} />
           <LeadStatusUpdater leadId={lead.id} currentStatus={lead.status} />
         </div>
