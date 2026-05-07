@@ -14,7 +14,13 @@ export type WorkspaceContext = {
     | "warehouse_staff"
     | "driver"
     | "sales"
-    | "customer_contact";
+    | "customer_contact"
+    // Marketing platform roles (added in migration 0018):
+    | "owner"
+    | "public_face"
+    | "ae"
+    | "sdr"
+    | "marketing_admin";
   facilityId: string | null;
 };
 
