@@ -44,51 +44,105 @@ type NavSection = {
 
 const sections: NavSection[] = [
   {
-    heading: "Overview",
+    heading: "Today",
     items: [
       {
-        href: "/app/dashboard",
-        label: "Dashboard",
+        href: "/app/today",
+        label: "Today",
         icon: LayoutDashboard,
-        match: (p) => p === "/app" || p.startsWith("/app/dashboard"),
+        match: (p) => p === "/app" || p.startsWith("/app/today") || p.startsWith("/app/dashboard"),
       },
-      { href: "/app/pipeline", label: "Pipeline", icon: KanbanSquare },
-      { href: "/app/tasks", label: "Tasks", icon: CheckSquare },
     ],
   },
   {
-    heading: "CRM",
+    heading: "Pipeline",
     items: [
+      { href: "/app/pipeline", label: "Pipeline", icon: KanbanSquare },
+      { href: "/app/inbox", label: "Inbox", icon: Inbox },
+      { href: "/app/leads", label: "Leads", icon: Users },
+      { href: "/app/accounts", label: "Accounts (ABM)", icon: Building2 },
       { href: "/app/customers", label: "Customers", icon: Users },
+    ],
+  },
+  {
+    heading: "Content",
+    items: [
+      { href: "/app/content/calendar", label: "Calendar", icon: KanbanSquare },
+      { href: "/app/content/articles", label: "Articles", icon: FileText },
+      { href: "/app/content/founder-brand", label: "Founder Brand", icon: UserCog },
+      { href: "/app/content/newsletters", label: "Newsletters", icon: Inbox },
+      { href: "/app/content/library", label: "Library", icon: FolderOpen },
+    ],
+  },
+  {
+    heading: "Distribution",
+    items: [
+      { href: "/app/distribution/social", label: "Social", icon: Megaphone },
+      { href: "/app/distribution/community", label: "Community", icon: Users },
+      { href: "/app/distribution/engagement", label: "Engagement", icon: Megaphone },
+      { href: "/app/distribution/listening", label: "Listening", icon: RefreshCcw },
+    ],
+  },
+  {
+    heading: "Outreach",
+    items: [
+      { href: "/app/outreach/queue", label: "My Queue", icon: ClipboardList },
+      { href: "/app/outreach/sequences", label: "Sequences", icon: KanbanSquare },
+      { href: "/app/outreach/replies", label: "Replies", icon: Inbox },
+    ],
+  },
+  {
+    heading: "Growth",
+    items: [
+      { href: "/app/growth/partners", label: "Partners", icon: Users },
+      { href: "/app/growth/pr", label: "PR & Media", icon: Megaphone },
+      { href: "/app/growth/events", label: "Events", icon: KanbanSquare },
+      { href: "/app/growth/influencers", label: "Influencers", icon: UserCog },
+    ],
+  },
+  {
+    heading: "Strategy",
+    items: [
+      { href: "/app/strategy/brand", label: "Brand Book", icon: FolderOpen },
+      { href: "/app/strategy/icps", label: "ICPs & Personas", icon: Users },
+      { href: "/app/strategy/competitors", label: "Competitors", icon: KanbanSquare },
+      { href: "/app/strategy/sales-kit", label: "Sales Kit", icon: FileText },
+    ],
+  },
+  {
+    heading: "Operations",
+    items: [
       { href: "/app/quotes", label: "Quotes", icon: FileText },
       { href: "/app/contracts", label: "Contracts", icon: FileSignature },
       { href: "/app/tickets", label: "Tickets", icon: LifeBuoy },
+      { href: "/app/tasks", label: "Tasks", icon: CheckSquare },
+      {
+        href: "/app/warehouse",
+        label: "Warehouse",
+        icon: Warehouse,
+        match: (p) => p === "/app/warehouse" || p.startsWith("/app/warehouse/"),
+      },
     ],
   },
   {
-    heading: "Communication",
+    heading: "Analytics",
     items: [
-      { href: "/app/inbox", label: "Shared inbox", icon: Inbox },
-      { href: "/app/campaigns", label: "Campaigns", icon: Megaphone },
-      { href: "/app/resources", label: "Resource hub", icon: FolderOpen },
-    ],
-  },
-  {
-    heading: "Warehouse",
-    items: [
-      { href: "/app/warehouse", label: "Overview", icon: Warehouse, match: (p) => p === "/app/warehouse" },
-      { href: "/app/warehouse/inbound", label: "Inbound receipts", icon: PackagePlus },
-      { href: "/app/warehouse/orders", label: "Fulfillment orders", icon: ClipboardList },
-      { href: "/app/warehouse/shipments", label: "Shipments", icon: Truck },
-      { href: "/app/warehouse/skus", label: "SKUs", icon: Boxes },
+      {
+        href: "/app/analytics",
+        label: "Dashboard",
+        icon: KanbanSquare,
+        match: (p) => p === "/app/analytics",
+      },
+      { href: "/app/analytics/funnel", label: "Funnel", icon: KanbanSquare },
+      { href: "/app/analytics/attribution", label: "Attribution", icon: KanbanSquare },
     ],
   },
   {
     heading: "Settings",
     items: [
+      { href: "/app/settings/team", label: "Team", icon: UserCog },
       { href: "/app/settings/facilities", label: "Facilities", icon: Building2 },
       { href: "/app/settings/rate-cards", label: "Rate cards", icon: ReceiptText },
-      { href: "/app/settings/team", label: "Team", icon: UserCog },
       { href: "/app/settings/wms", label: "WMS sync", icon: RefreshCcw },
       { href: "/app/settings", label: "All settings", icon: Settings, match: (p) => p === "/app/settings" },
     ],
