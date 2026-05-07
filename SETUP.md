@@ -52,11 +52,15 @@ WMS_IMPORT_SECRET=any-random-string
 ZEPTOMAIL_API_KEY=
 ZEPTOMAIL_FROM_EMAIL=hello@mail.transwayxpress.com
 
-# Optional — Zoho Social API credentials
-# Only needed if we build full automation (Option B). Day 1 uses manual paste workflow.
+# Zoho Social API — social posting (already included in your Zoho One subscription)
+# Get OAuth credentials from https://api-console.zoho.com/ → create a Server-based or Self Client app
+# Connect LinkedIn Company / Instagram / YouTube / Facebook in Zoho Social UI first.
 ZOHO_SOCIAL_CLIENT_ID=
 ZOHO_SOCIAL_CLIENT_SECRET=
 ZOHO_SOCIAL_REFRESH_TOKEN=
+ZOHO_SOCIAL_PORTAL_ID=
+# Region: .com (US), .eu (Europe), .in (India), .com.au, .com.cn, .jp
+ZOHO_API_DOMAIN=https://www.zohoapis.com
 
 # App URL (used for callbacks, emails)
 NEXT_PUBLIC_APP_URL=http://localhost:3000
