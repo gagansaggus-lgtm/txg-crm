@@ -54,28 +54,37 @@ export async function POST(req: Request) {
   const origin = req.headers.get("origin") ?? process.env.NEXT_PUBLIC_APP_URL ?? "";
   const inviteUrl = `${origin}/invite/${token}`;
 
-  // Best-effort email via Resend if configured; otherwise return the link for the admin to copy.
-  const resendKey = process.env.RESEND_API_KEY;
-  if (resendKey) {
+  // Best-effort email via Zoho ZeptoMail if configured; otherwise return the link for the admin to copy.
+  // Plan 6 (Distribution) wires this up; until then we return inviteUrl for manual sending.
+  const zeptoToken = process.env.ZEPTOMAIL_API_KEY;
+  const zeptoFrom = process.env.ZEPTOMAIL_FROM_EMAIL ?? "invites@mail.transwayxpress.com";
+  if (zeptoToken) {
     try {
-      const { Resend } = await import("resend");
-      const resend = new Resend(resendKey);
-      await resend.emails.send({
-        from: process.env.RESEND_FROM ?? "TXG Vector <invites@transwayxpress.com>",
-        to: email,
-        subject: "You've been invited to TXG Vector",
-        html: `
-          <div style="font-family:Manrope,system-ui,sans-serif;max-width:480px;padding:24px;color:#0c0c0c">
-            <p style="color:#f75928;font-weight:700;letter-spacing:.24em;text-transform:uppercase;font-size:11px;margin:0">Transway Xpress Global</p>
-            <h1 style="font-size:28px;margin:8px 0 16px">You're invited to the TXG workspace</h1>
-            <p style="line-height:1.6">${ctx.user.fullName || "An admin"} invited you to join as <strong>${body.role}</strong>.</p>
-            <p style="margin:24px 0"><a href="${inviteUrl}" style="background:#f75928;color:#fff;text-decoration:none;padding:12px 20px;border-radius:8px;font-weight:600;display:inline-block">Accept invite</a></p>
-            <p style="color:#74787c;font-size:13px">Link expires in 7 days. If the button doesn't work, paste this URL: <br><span style="word-break:break-all">${inviteUrl}</span></p>
-          </div>
-        `,
+      const subject = "You've been invited to TXG Vector";
+      const html = `
+        <div style="font-family:Manrope,system-ui,sans-serif;max-width:480px;padding:24px;color:#0c0c0c">
+          <p style="color:#f75928;font-weight:700;letter-spacing:.24em;text-transform:uppercase;font-size:11px;margin:0">Transway Xpress Global</p>
+          <h1 style="font-size:28px;margin:8px 0 16px">You're invited to the TXG workspace</h1>
+          <p style="line-height:1.6">${ctx.user.fullName || "An admin"} invited you to join as <strong>${body.role}</strong>.</p>
+          <p style="margin:24px 0"><a href="${inviteUrl}" style="background:#f75928;color:#fff;text-decoration:none;padding:12px 20px;border-radius:8px;font-weight:600;display:inline-block">Accept invite</a></p>
+          <p style="color:#74787c;font-size:13px">Link expires in 7 days. If the button doesn't work, paste this URL: <br><span style="word-break:break-all">${inviteUrl}</span></p>
+        </div>
+      `;
+      await fetch("https://api.zeptomail.com/v1.1/email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Zoho-enczapikey ${zeptoToken}`,
+        },
+        body: JSON.stringify({
+          from: { address: zeptoFrom, name: "TXG Vector" },
+          to: [{ email_address: { address: email } }],
+          subject,
+          htmlbody: html,
+        }),
       });
     } catch (err) {
-      console.warn("[invite] resend send failed:", err);
+      console.warn("[invite] zeptomail send failed:", err);
     }
   }
 
