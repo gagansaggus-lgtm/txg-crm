@@ -15,7 +15,7 @@ export function AppShell({ children, user }: AppShellProps) {
       <Sidebar user={user} />
       <div className="flex min-w-0 flex-1 flex-col pb-24 lg:pb-0">
         <MobileHeader user={user} />
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-8 pt-6 sm:px-6 lg:px-10 lg:pt-10">
+        <main className="mx-auto w-full max-w-[1200px] flex-1 px-5 pb-12 pt-7 sm:px-7 lg:px-10 lg:pt-10">
           {children}
         </main>
       </div>

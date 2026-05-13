@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -20,61 +19,63 @@ type PageHeaderProps = {
   align?: "default" | "hero";
 };
 
-export function PageHeader({ eyebrow, title, subtitle, actions, align = "default" }: PageHeaderProps) {
+/**
+ * Page header — minimal, no animations, consistent spacing.
+ * eyebrow → small uppercase label (orange)
+ * title → large weighted headline
+ * subtitle → muted supporting text
+ * actions → right-aligned buttons (primary = orange CTA, secondary = outline)
+ */
+export function PageHeader({
+  eyebrow,
+  title,
+  subtitle,
+  actions,
+  align = "default",
+}: PageHeaderProps) {
   const isHero = align === "hero";
   return (
     <header
       className={cn(
-        "flex flex-col gap-5",
-        isHero ? "items-start text-left" : "sm:flex-row sm:items-end sm:justify-between",
+        "flex flex-col gap-4 pb-1",
+        isHero ? "items-start text-left" : "sm:flex-row sm:items-end sm:justify-between sm:gap-6",
       )}
     >
-      <div className="space-y-3">
+      <div className="min-w-0 space-y-1.5">
         {eyebrow ? (
-          <motion.p
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, ease: [0.2, 0.7, 0.2, 1] }}
-            className="brand-eyebrow"
-          >
+          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--accent-600)]">
             {eyebrow}
-          </motion.p>
+          </p>
         ) : null}
-        <motion.h1
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.08, ease: [0.2, 0.7, 0.2, 1] }}
+        <h1
           className={cn(
-            "text-[var(--ink-950)]",
-            isHero ? "brand-display text-5xl sm:text-6xl" : "brand-headline text-3xl sm:text-4xl",
+            "brand-headline text-[var(--ink-950)] tracking-[-0.025em]",
+            isHero
+              ? "brand-display text-[40px] sm:text-[48px] leading-[1.05]"
+              : "text-[26px] sm:text-[30px] leading-[1.15]",
           )}
         >
           {title}
-        </motion.h1>
+        </h1>
         {subtitle ? (
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.14, ease: [0.2, 0.7, 0.2, 1] }}
-            className={cn("text-[var(--ink-700)]", isHero ? "max-w-2xl text-base sm:text-lg" : "text-sm")}
+          <p
+            className={cn(
+              "text-[var(--ink-700)] max-w-2xl",
+              isHero ? "text-base sm:text-lg leading-[1.55]" : "text-[14px] leading-[1.55]",
+            )}
           >
             {subtitle}
-          </motion.p>
+          </p>
         ) : null}
       </div>
       {actions && actions.length ? (
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.22, ease: [0.2, 0.7, 0.2, 1] }}
-          className="flex flex-wrap gap-2"
-        >
+        <div className="flex flex-wrap gap-2 shrink-0">
           {actions.map((action) =>
             action.variant === "secondary" ? (
               <Link
                 key={action.href}
                 href={action.href}
-                className={cn(buttonVariants({ variant: "outline", size: "lg" }), "px-5")}
+                className={cn(buttonVariants({ variant: "outline" }), "h-9 px-4 text-sm font-semibold")}
               >
                 {action.label}
               </Link>
@@ -82,13 +83,13 @@ export function PageHeader({ eyebrow, title, subtitle, actions, align = "default
               <Link
                 key={action.href}
                 href={action.href}
-                className="cta-primary inline-flex h-11 items-center justify-center rounded-lg px-5 text-sm font-semibold"
+                className="inline-flex h-9 items-center justify-center rounded-lg bg-[var(--accent-600)] px-4 text-sm font-semibold text-white shadow-[0_2px_8px_rgba(247,89,40,0.3)] transition-colors hover:bg-[var(--accent-700)]"
               >
                 {action.label}
               </Link>
             ),
           )}
-        </motion.div>
+        </div>
       ) : null}
     </header>
   );

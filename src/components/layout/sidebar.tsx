@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -31,6 +31,8 @@ import {
   Star,
   Briefcase,
   Headphones,
+  ChevronDown,
+  Check,
   type LucideIcon,
 } from "lucide-react";
 
@@ -53,8 +55,6 @@ type NavSection = {
 type WorkspaceMode = "marketing" | "operations" | "support";
 
 const MODE_STORAGE_KEY = "txg-vector-mode";
-
-// ============= NAV TREES PER MODE =============
 
 const MARKETING_SECTIONS: NavSection[] = [
   {
@@ -174,9 +174,7 @@ const OPERATIONS_SECTIONS: NavSection[] = [
   },
   {
     heading: "Tasks",
-    items: [
-      { href: "/app/tasks", label: "All tasks", icon: CheckSquare },
-    ],
+    items: [{ href: "/app/tasks", label: "All tasks", icon: CheckSquare }],
   },
 ];
 
@@ -225,10 +223,27 @@ const SETTINGS_SECTION: NavSection = {
   ],
 };
 
-const MODES: Array<{ value: WorkspaceMode; label: string; icon: LucideIcon }> = [
-  { value: "marketing", label: "Marketing", icon: Target },
-  { value: "operations", label: "Operations", icon: Briefcase },
-  { value: "support", label: "Support", icon: Headphones },
+type Mode = { value: WorkspaceMode; label: string; description: string; icon: LucideIcon };
+
+const MODES: Mode[] = [
+  {
+    value: "marketing",
+    label: "Marketing & Sales",
+    description: "Leads, outreach, content, analytics",
+    icon: Target,
+  },
+  {
+    value: "operations",
+    label: "Operations",
+    description: "Customers, warehouse, fulfillment",
+    icon: Briefcase,
+  },
+  {
+    value: "support",
+    label: "Support",
+    description: "Tickets, inbox, resources",
+    icon: Headphones,
+  },
 ];
 
 function detectModeFromPath(pathname: string): WorkspaceMode | null {
@@ -285,10 +300,10 @@ type SidebarProps = {
 
 export function Sidebar({ user }: SidebarProps) {
   const pathname = usePathname();
-
-  // Mode state — initialize from path, persist to localStorage
   const [mode, setMode] = useState<WorkspaceMode>("marketing");
   const [hydrated, setHydrated] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const stored = window.localStorage.getItem(MODE_STORAGE_KEY) as WorkspaceMode | null;
@@ -301,6 +316,20 @@ export function Sidebar({ user }: SidebarProps) {
     if (hydrated) window.localStorage.setItem(MODE_STORAGE_KEY, mode);
   }, [mode, hydrated]);
 
+  useEffect(() => {
+    function onClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+    if (menuOpen) {
+      document.addEventListener("mousedown", onClickOutside);
+      return () => document.removeEventListener("mousedown", onClickOutside);
+    }
+  }, [menuOpen]);
+
+  const currentMode = MODES.find((m) => m.value === mode)!;
+  const ModeIcon = currentMode.icon;
   const sections = getSectionsForMode(mode);
 
   const initials = (user.fullName || user.email)
@@ -311,36 +340,98 @@ export function Sidebar({ user }: SidebarProps) {
     .join("");
 
   return (
-    <aside className="sticky top-0 hidden h-screen w-[260px] shrink-0 flex-col border-r border-[var(--line-soft)] bg-[var(--card)] lg:flex">
-      {/* Brand header */}
+    <aside className="sticky top-0 hidden h-screen w-[272px] shrink-0 flex-col border-r border-[var(--line-soft)] bg-[var(--card)] lg:flex">
+      {/* Brand */}
       <div className="px-5 py-5 border-b border-[var(--line-soft)]">
         <BrandMark />
       </div>
 
-      {/* Mode tab switcher */}
-      <div className="border-b border-[var(--line-soft)] px-3 py-3">
-        <div className="grid grid-cols-3 gap-1 rounded-lg bg-[var(--surface-soft)] p-1">
-          {MODES.map((m) => {
-            const Icon = m.icon;
-            const active = mode === m.value;
-            return (
-              <button
-                key={m.value}
-                type="button"
-                onClick={() => setMode(m.value)}
-                className={cn(
-                  "flex flex-col items-center gap-1 rounded-md px-2 py-2 text-[10px] font-bold uppercase tracking-[0.08em] transition-colors",
-                  active
-                    ? "bg-[var(--card)] text-[var(--accent-600)] shadow-sm"
-                    : "text-[var(--ink-500)] hover:text-[var(--ink-700)]",
-                )}
-              >
-                <Icon className="h-3.5 w-3.5" strokeWidth={2} />
-                {m.label}
-              </button>
-            );
-          })}
-        </div>
+      {/* Workspace mode switcher — single clickable element with dropdown */}
+      <div className="relative px-3 py-3 border-b border-[var(--line-soft)]" ref={menuRef}>
+        <button
+          type="button"
+          onClick={() => setMenuOpen((v) => !v)}
+          className={cn(
+            "group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors",
+            "border border-[var(--line-soft)] bg-[var(--surface-soft)] hover:border-[var(--line-strong)]",
+            menuOpen && "border-[var(--accent-600)] bg-[var(--accent-100)]",
+          )}
+        >
+          <span
+            className={cn(
+              "grid h-8 w-8 shrink-0 place-items-center rounded-md transition-colors",
+              menuOpen
+                ? "bg-[var(--accent-600)] text-white"
+                : "bg-[var(--card)] text-[var(--accent-600)] border border-[var(--line-soft)]",
+            )}
+          >
+            <ModeIcon className="h-4 w-4" strokeWidth={2} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--ink-500)]">
+              Workspace
+            </p>
+            <p className="text-[13px] font-semibold text-[var(--ink-950)] truncate">
+              {currentMode.label}
+            </p>
+          </div>
+          <ChevronDown
+            className={cn(
+              "h-4 w-4 text-[var(--ink-500)] transition-transform shrink-0",
+              menuOpen && "rotate-180",
+            )}
+          />
+        </button>
+
+        {menuOpen && (
+          <div className="absolute left-3 right-3 top-[calc(100%-4px)] z-30 mt-2 overflow-hidden rounded-lg border border-[var(--line-strong)] bg-[var(--card)] shadow-lg">
+            {MODES.map((m) => {
+              const Icon = m.icon;
+              const active = m.value === mode;
+              return (
+                <button
+                  key={m.value}
+                  type="button"
+                  onClick={() => {
+                    setMode(m.value);
+                    setMenuOpen(false);
+                  }}
+                  className={cn(
+                    "flex w-full items-start gap-3 px-3 py-2.5 text-left transition-colors",
+                    active ? "bg-[var(--accent-100)]" : "hover:bg-[var(--surface-soft)]",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "grid h-7 w-7 shrink-0 place-items-center rounded-md mt-0.5",
+                      active
+                        ? "bg-[var(--accent-600)] text-white"
+                        : "bg-[var(--surface-soft)] text-[var(--ink-700)]",
+                    )}
+                  >
+                    <Icon className="h-3.5 w-3.5" strokeWidth={2} />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p
+                      className={cn(
+                        "text-[13px] font-semibold",
+                        active ? "text-[var(--ink-950)]" : "text-[var(--ink-700)]",
+                      )}
+                    >
+                      {m.label}
+                    </p>
+                    <p className="text-[11px] text-[var(--ink-500)] line-clamp-1">
+                      {m.description}
+                    </p>
+                  </div>
+                  {active && (
+                    <Check className="h-4 w-4 text-[var(--accent-600)] shrink-0 mt-1.5" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Navigation */}
@@ -348,7 +439,7 @@ export function Sidebar({ user }: SidebarProps) {
         <div className="space-y-5">
           {sections.map((section) => (
             <div key={section.heading} className="space-y-0.5">
-              <p className="px-3 pb-1 text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--ink-400)]">
+              <p className="px-3 pb-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--ink-400)]">
                 {section.heading}
               </p>
               <ul className="space-y-0.5">
@@ -390,9 +481,8 @@ export function Sidebar({ user }: SidebarProps) {
             </div>
           ))}
 
-          {/* Settings always available at bottom of every mode */}
           <div className="space-y-0.5 pt-3 border-t border-[var(--line-soft)]">
-            <p className="px-3 pb-1 text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--ink-400)]">
+            <p className="px-3 pb-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--ink-400)]">
               {SETTINGS_SECTION.heading}
             </p>
             <ul className="space-y-0.5">
@@ -436,9 +526,9 @@ export function Sidebar({ user }: SidebarProps) {
       </nav>
 
       {/* User block */}
-      <div className="border-t border-[var(--line-soft)] p-4">
-        <div className="flex items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-[var(--surface-soft)] transition-colors cursor-default">
-          <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[var(--accent-600)] text-[10px] font-bold uppercase text-white shadow-[0_1px_4px_rgba(247,89,40,0.3)]">
+      <div className="border-t border-[var(--line-soft)] p-3">
+        <div className="flex items-center gap-3 rounded-lg px-2 py-1.5">
+          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--accent-600)] text-[11px] font-bold uppercase text-white shadow-[0_2px_6px_rgba(247,89,40,0.35)]">
             {initials || "TX"}
           </div>
           <div className="min-w-0 flex-1">
